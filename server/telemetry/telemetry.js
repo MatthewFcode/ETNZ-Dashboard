@@ -5,7 +5,7 @@ const db = connection
 function generateTelemetry(sensorId) {
   return {
     sensor_id: sensorId,
-    time_stamp: Date.now(),
+    time_stamp: new Date().toISOString(),
     speed: parseFloat((Math.random() * 120).toFixed(2)),
     temperature: parseFloat((15 + Math.random() * 10).toFixed(2)),
     battery: parseFloat((50 + Math.random() * 50).toFixed(1)),
