@@ -28,8 +28,10 @@
     ]
   },
   "dependencies": {
+    "camelcase-keys": "^10.0.1",
     "express": "^4.17.2",
     "knex": "^2.5.1",
+    "snakecase-keys": "^9.0.2",
     "sqlite3": "^5.1.6",
     "superagent": "^10.2.1"
   },
