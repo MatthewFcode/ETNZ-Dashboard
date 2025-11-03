@@ -1,8 +1,7 @@
-import { useState } from 'react'
-import { useTelemetryData } from '../hooks/useTelemetry.ts'
+import { useTelemetry } from './Context.tsx'
 
 function Dashboard() {
-  const { data, isPending, isError } = useTelemetryData()
+  const { data, isPending, isError } = useTelemetry()
   if (isPending) {
     return <div>...Loading</div>
   }
@@ -11,8 +10,15 @@ function Dashboard() {
   }
   return (
     <div>
-      <h1>Telemetry Data</h1>
-      {data.map()}
+      <h1>Telemetry Dashboard</h1>
+      {data.map((sensor, i: number) => (
+        <div key={i}>
+          <h3>{sensor.speed}</h3>
+          <p>Speed: {sensor.speed}</p>
+          <p>Temp: {sensor.temperature}</p>
+          <p>Battery: {sensor.battery}</p>
+        </div>
+      ))}
     </div>
   )
 }

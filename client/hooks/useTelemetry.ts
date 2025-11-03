@@ -8,7 +8,7 @@ import { getTelemetryDataBySensor } from '../apis/telemetry.ts'
 
 export function useTelemetryData(sensorId: string) {
   const query = useQuery({
-    queryKey: ['fruits'],
+    queryKey: ['telemetry', sensorId],
     queryFn: () => getTelemetryDataBySensor(sensorId),
   })
   return query
