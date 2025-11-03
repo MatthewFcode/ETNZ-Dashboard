@@ -4,14 +4,14 @@ import {
   useQueryClient,
   MutationFunction,
 } from '@tanstack/react-query'
-import { getFruits } from '../apis/fruits.ts'
+import { getTelemetryDataBySensor } from '../apis/telemetry.ts'
 
-export function useFruits() {
-  const query = useQuery({ queryKey: ['fruits'], queryFn: getFruits })
-  return {
-    ...query,
-    // Extra queries go here e.g. addFruit: useAddFruit()
-  }
+export function useTelemetryData(sensorId: string) {
+  const query = useQuery({
+    queryKey: ['fruits'],
+    queryFn: () => getTelemetryDataBySensor(sensorId),
+  })
+  return query
 }
 
 export function useFruitsMutation<TData = unknown, TVariables = unknown>(
@@ -27,8 +27,3 @@ export function useFruitsMutation<TData = unknown, TVariables = unknown>(
 
   return mutation
 }
-
-// Query functions go here e.g. useAddFruit
-/* function useAddFruit() {
-  return useFruitsMutation(addFruit)
-} */
