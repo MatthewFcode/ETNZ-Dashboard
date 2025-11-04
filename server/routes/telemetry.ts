@@ -26,7 +26,7 @@ router.get('/', async (req, res) => {
       }),
     )
 
-    console.log(result)
+    //console.log(result)
     res.status(200).json(result)
   } catch (err) {
     res.status(200).json('Could not get all telemetry data')

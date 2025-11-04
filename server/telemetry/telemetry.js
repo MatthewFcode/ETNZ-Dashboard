@@ -1,6 +1,5 @@
 import connection from '../db/connection.ts'
 import ws from 'ws'
-import { wss } from '../server.ts'
 
 const db = connection
 
@@ -15,7 +14,7 @@ function generateTelemetry(sensorId) {
   }
 }
 
-async function startTelemetryGeneration() {
+export async function startTelemetryGeneration(wss) {
   // declare an array of sensors 15 all producing the same data
   const sensors = [
     'sensor-1',
@@ -49,5 +48,3 @@ async function startTelemetryGeneration() {
     }
   }, 200)
 }
-
-startTelemetryGeneration()

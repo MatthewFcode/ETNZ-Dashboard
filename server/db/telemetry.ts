@@ -6,7 +6,7 @@ const db = connection
 export async function getAllData(): Promise<TelemetryDataSnake[] | undefined> {
   try {
     const result = await db('telemetry').select()
-    console.log(result)
+    //console.log(result)
     return result
   } catch (err) {
     console.log(err)

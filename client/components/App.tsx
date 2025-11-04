@@ -6,7 +6,7 @@ function App() {
   const queryClient = useQueryClient()
 
   useEffect(() => {
-    const ws = new WebSocket('wss://localhost:3000')
+    const ws = new WebSocket('ws://localhost:3000')
     ws.onopen = () => {
       console.log('WebSocket connected')
     }
