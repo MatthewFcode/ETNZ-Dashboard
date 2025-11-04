@@ -1,35 +1,32 @@
-import { createContext, useContext } from 'react'
-import { useTelemetryData } from '../hooks/useTelemetry.ts'
+import { createContext, useContext, ReactNode } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import { getAllTelemetryData } from '../apis/telemetry.ts'
+import { TelemetryDataCamel } from '../../models/telemetry.ts'
 
-const TelemetryContext = createContext(null)
+interface TelemetryContextType {
+  data: TelemetryDataCamel[]
+  isPending: boolean
+  isError: boolean
+}
+const TelemetryContext = createContext<TelemetryContextType | null>(null)
 
-export function TelemetryProvider({ children }) {
-  const sensors = [
-    'sensor-1',
-    'sensor-2',
-    'sensor-3',
-    'sensor-4',
-    'sensor-5',
-    'sensor-6',
-    'sensor-7',
-    'sensor-8',
-    'sensor-9',
-    'sensor-10',
-  ]
-
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const sensorQueries = sensors.map((id) => useTelemetryData(id))
-  const data = sensorQueries.map((q) => q.data).filter(Boolean)
-  const isLoading = sensorQueries.some((q) => q.isPending)
-  const isError = sensorQueries.some((q) => q.isError)
+export function TelemetryProvider({ children }: { children: ReactNode }) {
+  const { data, isPending, isError } = useQuery({
+    queryKey: ['telemetry', 'all-sensors'],
+    queryFn: getAllTelemetryData,
+  })
 
   return (
-    <TelemetryContext.Provider value={{ data, isLoading, isError }}>
+    <TelemetryContext.Provider value={{ data, isPending, isError }}>
       {children}
     </TelemetryContext.Provider>
   )
 }
 
 export function useTelemetry() {
-  return useContext(TelemetryContext)
+  const context = useContext(TelemetryContext)
+  if (!context) {
+    throw new Error('useTelemetry must be used within TelemetryProvider')
+  }
+  return context
 }

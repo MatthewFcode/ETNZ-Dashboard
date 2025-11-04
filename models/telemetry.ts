@@ -8,7 +8,7 @@ export interface TelemetryDataSnake {
 }
 
 export interface TelemetryDataCamel {
-  sensoId: string
+  sensorId: string
   timeStamp: string
   speed: number
   temperature: number
