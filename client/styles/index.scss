@@ -267,3 +267,110 @@ body {
     font-size: 2rem;
   }
 }
+
+/* Responsive adjustments */
+@media (max-width: 1600px) {
+  .sensor-grid {
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(auto-fit, minmax(150px, 1fr));
+  }
+}
+
+@media (max-width: 1200px) {
+  .dashboard-header {
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0.5rem;
+  }
+
+  .dashboard-header h1 {
+    font-size: 1.2rem;
+  }
+
+  .sensor-grid {
+    grid-template-columns: repeat(3, 1fr);
+    margin-top: 1rem;
+  }
+}
+
+@media (max-width: 992px) {
+  .sensor-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  body {
+    overflow: auto;
+  }
+
+  .app {
+    height: auto;
+    overflow: auto;
+  }
+
+  .dashboard-header {
+    padding: 0.5rem;
+  }
+
+  .dashboard-header h1 {
+    font-size: 1rem;
+  }
+
+  .sensor-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    grid-row-gap: 1rem;
+    margin-top: 1rem;
+  }
+
+  .sensor-card {
+    padding: 0.5rem;
+  }
+
+  .speed-display .speed-value {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .dashboard-header {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .dashboard-header img {
+    max-width: 60px;
+  }
+
+  .dashboard-header h1 {
+    font-size: 0.9rem;
+  }
+
+  .live-indicator {
+    margin-left: 0;
+  }
+
+  .speed-display .speed-value {
+    font-size: 1.8rem;
+  }
+
+  .telemetry-data {
+    grid-template-columns: 1fr;
+    gap: 0.25rem;
+  }
+
+  .data-item {
+    padding: 0.25rem;
+  }
+}
+
+@media (max-width: 375px) {
+  .dashboard-header h1 {
+    font-size: 0.8rem;
+  }
+
+  .speed-display .speed-value {
+    font-size: 1.5rem;
+  }
+}
