@@ -1,34 +1,20 @@
-# Boilerplate: Fullstack with Sass
+# Live Telemetry Simulator and Dashboard
 
-## Setup
+## Link to deployed dashboard -> https://etnz-dashboard.borb.nz/
 
-### What's included
+This project simulates the process of sending **live telemetry data** through a full-stack setup with optimized performance. It demonstrates how to handle rapidly updating data while minimizing UI re-renders in React.
 
-This repo includes:
+Telemetry data is generated randomly from a **JavaScript script running on the server**, updating existing data entries every **100ms**, simulating a real-time data feed.
 
-* a single, simple API endpoint (`/api/v1/fruits`)
-* a single React component (`<App />`)
-* an example database module (`server/db/fruits.js`)
-* an API client module (`client/apis/fruits.js`)
-* configuration for Vitest and testing library
-* configuration for server-side debugging in VS Code
-* configuration for preprocessing Sass
+A **WebSocket server** notifies the client when database changes occur. React Query is used to refetch query keys, but this refetching is **throttled to 700ms** to:
+- Ensure data readability when displayed.
+- Prevent excessive re-renders that could overload the React UI.
 
-### Installation
+Additionally, **`useContext()`** is employed to globalize React Query data, making it accessible across the entire React component tree.
 
-#### **From the Github UI**
-
-See the instructions [here](https://docs.github.com/en/free-pro-team@latest/github/creating-cloning-and-archiving-repositories/creating-a-repository-from-a-template) to use Github's feature to create a new repo from a template.
-
-```
-git clone [your-project-ssh-address]
-cd [your-project-name]
-npm install # to install dependencies
-npm run dev # to start the dev server
-```
-```
-
-You can find the server running on [http://localhost:3000](http://localhost:3000) and the client running on [http://localhost:5173](http://localhost:5173).
-
----
-[Provide feedback on this repo](https://docs.google.com/forms/d/e/1FAIpQLSfw4FGdWkLwMLlUaNQ8FtP2CTJdGDUv6Xoxrh19zIrJSkvT4Q/viewform?usp=pp_url&entry.1958421517=boilerplate-fullstack)
+## Features
+- Real-time telemetry simulation
+- Throttled React Query refetching for performance optimization
+- Full-stack architecture with WebSocket updates
+- Global state management using React Context
+- Responsive dashboard UI for telemetry visualization
