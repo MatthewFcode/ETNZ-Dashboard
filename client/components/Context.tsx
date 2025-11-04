@@ -17,7 +17,8 @@ export function TelemetryProvider({ children }: { children: ReactNode }) {
   })
 
   return (
-    <TelemetryContext.Provider value={{ data, isPending, isError }}>
+    // <TelemetryContext.Provider value={{ data: || [], isPending, isError }}>
+    <TelemetryContext.Provider value={{ data: data ?? [], isPending, isError }}>
       {children}
     </TelemetryContext.Provider>
   )
