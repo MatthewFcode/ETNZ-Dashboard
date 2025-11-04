@@ -15,6 +15,11 @@ export async function seed(knex) {
     'sensor-8',
     'sensor-9',
     'sensor-10',
+    'sensor-11',
+    'sensor-12',
+    'sensor-13',
+    'sensor-14',
+    'sensor-15',
   ]
   const seedData = sensors.map((id) => ({
     sensor_id: id,

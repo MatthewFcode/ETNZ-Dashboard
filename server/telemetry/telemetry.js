@@ -27,6 +27,11 @@ export async function startTelemetryGeneration(wss) {
     'sensor-8',
     'sensor-9',
     'sensor-10',
+    'sensor-11',
+    'sensor-12',
+    'sensor-13',
+    'sensor-14',
+    'sensor-15',
   ]
   console.log('starting telemetry stream')
 

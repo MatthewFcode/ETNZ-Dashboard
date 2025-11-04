@@ -37,22 +37,6 @@ function App() {
     return () => {
       ws.close()
     }
-
-    // ws.onmessage = (event) => {
-    //   const data = JSON.parse(event.data)
-    //   if (data.type == 'database_change') {
-    //     queryClient.invalidateQueries({
-    //       queryKey: ['telemetry', 'all-sensors'],
-    //     })
-    //   }
-    //   ws.onclose = () => {
-    //     console.log('WebSocket closed')
-    //   }
-    //   ws.onerror = (error) => {
-    //     console.log('WebSocket error', error)
-    //   }
-    //   return () => ws.close()
-    // }
   }, [queryClient])
   return (
     <>
