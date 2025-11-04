@@ -7,6 +7,7 @@ function App() {
 
   useEffect(() => {
     const ws = new WebSocket('ws://localhost:3000')
+    let shouldInvalidate = false
     ws.onopen = () => {
       console.log('WebSocket connected')
     }
@@ -16,14 +17,24 @@ function App() {
       try {
         const data = JSON.parse(event.data)
         if (data.type === 'database_change') {
-          queryClient.invalidateQueries({
-            queryKey: ['telemetry', 'all-sensors'],
-          })
+          // once there is the change in the database detected mark a the variable as true
+          shouldInvalidate = true
+          // queryClient.invalidateQueries({
+          //   queryKey: ['telemetry', 'all-sensors'],
+          // })
         }
       } catch (err) {
         console.error('Error parsing WebSocket message:', err)
       }
     }
+
+    const interval = setInterval(() => {
+      if (shouldInvalidate) {
+        queryClient.invalidateQueries({
+          queryKey: ['telemetry', 'all-sensors'],
+        })
+      }
+    }, 700)
 
     ws.onclose = () => {
       console.log('WebSocket closed')
@@ -36,6 +47,7 @@ function App() {
     // Cleanup on unmount
     return () => {
       ws.close()
+      clearInterval(interval)
     }
   }, [queryClient])
   return (

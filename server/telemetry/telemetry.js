@@ -7,10 +7,10 @@ function generateTelemetry(sensorId) {
   return {
     sensor_id: sensorId,
     time_stamp: new Date().toISOString(),
-    speed: parseFloat((Math.random() * 120).toFixed(2)),
+    speed: parseFloat((Math.random() * 35).toFixed(2)),
     temperature: parseFloat((15 + Math.random() * 10).toFixed(2)),
     battery: parseFloat((50 + Math.random() * 50).toFixed(1)),
-    altitude: parseFloat((100 + Math.random() * 50).toFixed(2)),
+    altitude: parseFloat((100 + Math.random() * 50).toFixed(2)), // meters above sea level
   }
 }
 
