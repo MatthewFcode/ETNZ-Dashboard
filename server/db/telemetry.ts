@@ -3,6 +3,16 @@ import { TelemetryDataSnake } from '../../models/telemetry.ts'
 
 const db = connection
 
+export async function getAllData(): Promise<TelemetryDataSnake[] | undefined> {
+  try {
+    const result = await db('telemetry').select()
+    //console.log(result)
+    return result
+  } catch (err) {
+    console.log(err)
+  }
+}
+
 export async function getTelemetryDataBySensor(
   sensorId: string,
 ): Promise<TelemetryDataSnake[] | undefined> {

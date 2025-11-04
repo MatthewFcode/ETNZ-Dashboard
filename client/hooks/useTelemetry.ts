@@ -4,15 +4,26 @@ import {
   useQueryClient,
   MutationFunction,
 } from '@tanstack/react-query'
-import { getTelemetryDataBySensor } from '../apis/telemetry.ts'
+import {
+  getTelemetryDataBySensor,
+  // getAllTelemetryData,
+} from '../apis/telemetry.ts'
 
 export function useTelemetryData(sensorId: string) {
   const query = useQuery({
-    queryKey: ['fruits'],
+    queryKey: ['telemetry', sensorId],
     queryFn: () => getTelemetryDataBySensor(sensorId),
   })
   return query
 }
+
+// export function useAllTelemetryData() {
+//   const query = useQuery({
+//     queryKey: ['all-data'],
+//     queryFn: getAllTelemetryData,
+//   })
+//   return query
+// }
 
 export function useFruitsMutation<TData = unknown, TVariables = unknown>(
   mutationFn: MutationFunction<TData, TVariables>,

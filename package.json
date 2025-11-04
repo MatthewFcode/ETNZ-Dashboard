@@ -14,7 +14,6 @@
     "dev": "run-p dev:client dev:server",
     "dev:client": "vite",
     "dev:server": "tsx watch server/index.ts",
-    "dev:telemetry": "tsx watch server/telemetry/telemetry.js",
     "build": "run-s build:client build:server",
     "build:client": "vite build",
     "build:server": "esbuild --packages=external --platform=node --format=esm --outfile=dist/server.js --bundle server/index.ts",
@@ -28,8 +27,10 @@
     ]
   },
   "dependencies": {
+    "camelcase-keys": "^10.0.1",
     "express": "^4.17.2",
     "knex": "^2.5.1",
+    "snakecase-keys": "^9.0.2",
     "sqlite3": "^5.1.6",
     "superagent": "^10.2.1"
   },
@@ -44,6 +45,7 @@
     "@types/react-dom": "^18.0.11",
     "@types/superagent": "^8.1.1",
     "@types/supertest": "^6.0.2",
+    "@types/ws": "^8.18.1",
     "@vitejs/plugin-react": "^4.2.1",
     "esbuild": "^0.18.19",
     "eslint": "^8.56.0",

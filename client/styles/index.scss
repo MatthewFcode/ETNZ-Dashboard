@@ -1,6 +1,269 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;400;700&display=swap');
+// Emirates Team New Zealand Color Theme
+$etnz-red: #e4002b;
+$etnz-dark-blue: #001f3f;
+$etnz-light-blue: #0074d9;
+$etnz-white: #ffffff;
+$etnz-silver: #c0c0c0;
+$etnz-dark-gray: #2c3e50;
+$etnz-bg-dark: #0a1628;
 
-html, 
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 body {
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, $etnz-bg-dark 0%, $etnz-dark-blue 100%);
+  color: $etnz-white;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.app {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  overflow: hidden;
+}
+
+// Header Section - Compact
+.dashboard-header {
+  text-align: center;
+  padding: 0.75rem 1rem;
+  background: rgba(0, 31, 63, 0.6);
+  border-radius: 8px;
+  border: 2px solid $etnz-red;
+  box-shadow: 0 4px 16px rgba(228, 0, 43, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  flex-shrink: 0;
+
+  img {
+    max-width: 80px;
+    height: auto;
+    filter: drop-shadow(0 2px 4px rgba(228, 0, 43, 0.3));
+  }
+
+  h1 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: $etnz-white;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin: 0;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  }
+
+  .live-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.4rem 0.8rem;
+    background: rgba(228, 0, 43, 0.2);
+    border-radius: 20px;
+    border: 1px solid $etnz-red;
+    margin-left: 1rem;
+
+    &::before {
+      content: '';
+      width: 8px;
+      height: 8px;
+      background: $etnz-red;
+      border-radius: 50%;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    span {
+      color: $etnz-white;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+  }
+}
+
+// Loading and Error States
+.loading,
+.error {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  font-size: 1.5rem;
+  color: $etnz-silver;
+}
+
+.error {
+  color: $etnz-red;
+  font-weight: 600;
+}
+
+// Sensor Grid - Fixed height to fit screen
+.sensor-grid {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  grid-column-gap: 1rem;
+  grid-row-gap: 3rem;
+  margin-top: 6rem;
+  overflow: hidden;
+  min-height: 0;
+}
+
+// Sensor Card - Compact
+.sensor-card {
+  background: linear-gradient(145deg, rgba(0, 31, 63, 0.8), rgba(0, 116, 217, 0.1));
+  border: 2px solid $etnz-light-blue;
+  border-radius: 12px;
+  padding: 0.75rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 20px rgba(0, 116, 217, 0.15);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, $etnz-red 0%, $etnz-light-blue 100%);
+  }
+
+  &:hover {
+    transform: scale(1.01);
+    border-color: $etnz-red;
+    box-shadow: 0 6px 24px rgba(228, 0, 43, 0.3);
+  }
+
+  h2 {
+    color: $etnz-red;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 0.5rem;
+    padding-bottom: 0.25rem;
+    border-bottom: 1px solid rgba(228, 0, 43, 0.3);
+    flex-shrink: 0;
+  }
+}
+
+// Speed Display (Large) - Compact
+.speed-display {
+  text-align: center;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  background: rgba(228, 0, 43, 0.1);
+  border-radius: 8px;
+  border: 2px solid rgba(228, 0, 43, 0.3);
+  margin-bottom: 0.5rem;
+
+  .speed-value {
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: $etnz-red;
+    line-height: 1;
+    text-shadow: 0 0 15px rgba(228, 0, 43, 0.5);
+    display: block;
+  }
+
+  .speed-unit {
+    font-size: 0.7rem;
+    color: $etnz-silver;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-top: 0.25rem;
+  }
+}
+
+// Telemetry Data - Compact
+.telemetry-data {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.data-item {
+  background: rgba(0, 116, 217, 0.1);
+  border: 1px solid rgba(0, 116, 217, 0.3);
+  border-radius: 6px;
+  padding: 0.5rem;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: rgba(0, 116, 217, 0.2);
+    border-color: $etnz-light-blue;
+  }
+
+  .data-label {
+    font-size: 0.6rem;
+    color: $etnz-silver;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.25rem;
+    font-weight: 600;
+  }
+
+  .data-value {
+    font-size: 1rem;
+    font-weight: 700;
+    color: $etnz-white;
+    display: flex;
+    align-items: baseline;
+    gap: 0.2rem;
+
+    .unit {
+      font-size: 0.7rem;
+      color: $etnz-silver;
+      font-weight: 500;
+    }
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    box-shadow: 0 0 0 0 rgba(228, 0, 43, 0.7);
+  }
+  50% {
+    opacity: 0.5;
+    box-shadow: 0 0 0 8px rgba(228, 0, 43, 0);
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 1400px) {
+  .sensor-grid {
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 1024px) {
+  .sensor-grid {
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+  }
+
+  .speed-display .speed-value {
+    font-size: 2rem;
+  }
 }
