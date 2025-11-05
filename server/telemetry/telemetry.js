@@ -39,6 +39,7 @@ export async function startTelemetryGeneration(wss) {
     for (const id of sensors) {
       const telemetry = generateTelemetry(id)
       await db('telemetry').where('telemetry.sensor_id', id).update(telemetry)
+      await db('historical_data').insert(telemetry)
 
       wss.clients.forEach((client) => {
         if (client.readyState === ws.OPEN) {
