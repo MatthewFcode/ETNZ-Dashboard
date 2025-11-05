@@ -1,13 +1,16 @@
 import request from 'superagent'
 import { TelemetryDataCamel } from '../../models/telemetry.ts'
 
-const rootURL = new URL(`/api/v1`, document.baseURI)
+const rootURL =
+  typeof document !== 'undefined'
+    ? new URL(`/api/v1`, document.baseURI)
+    : 'http://localhost:3000/api/v1'
 
 export async function getAllTelemetryData(): Promise<
   TelemetryDataCamel[] | undefined
 > {
   try {
-    const result = await request.get('/api/v1/telemetry')
+    const result = await request.get(`${rootURL}/telemetry`)
     return result.body
   } catch (err) {
     console.log(err)
