@@ -1,0 +1,21 @@
+name: Node.js CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup nNode.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 18
+      - uses: actions/checkout@v2
+      - name: Install modules
+        run: npm i
+      - name: Run unit tests
+        run: npm run test
