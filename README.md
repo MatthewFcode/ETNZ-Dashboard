@@ -2,6 +2,8 @@
 
 ## Link to deployed dashboard -> https://etnz-dashboard.borb.nz/
 
+![Node.js CI](https://github.com/MatthewFcode/ETNZ-Dashboard/actions/workflows/nodejs-sqlite-ci.yml/badge.svg)
+
 This project simulates the process of sending **live telemetry data** through a full-stack setup with optimized performance. It demonstrates how to handle rapidly updating data while minimizing UI re-renders in React.
 
 Telemetry data is generated randomly from a **JavaScript script running on the server**, updating existing data entries every **100ms**, simulating a real-time data feed.
