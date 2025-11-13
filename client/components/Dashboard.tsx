@@ -1,7 +1,22 @@
 import { useTelemetry } from './Context.tsx'
+import { IfAuthenticated, IfNotAuthenticated } from './Auth0.tsx'
+import { useAuth0 } from '@auth0/auth0-react'
+import { useNavigate } from 'react-router'
 
 function Dashboard() {
   const { data, isPending, isError } = useTelemetry()
+  const { logout, loginWithRedirect } = useAuth0()
+  const handleLogout = () => {
+    logout({ logoutParams: { returnTo: window.location.origin } })
+  }
+
+  const handleLogin = () => {
+    loginWithRedirect({
+      authorizationParams: {
+        redirectUri: `${window.location.origin}/registration`,
+      },
+    })
+  }
 
   if (isPending) {
     return <div className="loading">Loading Telemetry Data...</div>
@@ -14,6 +29,12 @@ function Dashboard() {
   return (
     <div>
       <div className="dashboard-header">
+        <IfNotAuthenticated>
+          <button onClick={handleLogin}>Sign In</button>
+        </IfNotAuthenticated>
+        <IfAuthenticated>
+          <button onClick={handleLogout}>Sign Out</button>
+        </IfAuthenticated>
         <img src="/images/teamnz.png" alt="ETNZ-logo" />
         <h1>Emirates Team New Zealand Telemetry Dashboard</h1>
         <div className="live-indicator">
