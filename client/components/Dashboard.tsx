@@ -1,7 +1,7 @@
 import { useTelemetry } from './Context.tsx'
 import { IfAuthenticated, IfNotAuthenticated } from './Auth0.tsx'
 import { useAuth0 } from '@auth0/auth0-react'
-import { useNavigate } from 'react-router'
+//import { useNavigate } from 'react-router'
 
 function Dashboard() {
   const { data, isPending, isError } = useTelemetry()
