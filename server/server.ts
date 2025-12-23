@@ -4,7 +4,7 @@ import { createServer } from 'http'
 import { WebSocketServer } from 'ws'
 
 import telemetryRoutes from './routes/telemetry.ts'
-
+import userRoutes from './routes/telemetry.ts'
 const app = express()
 
 const server = createServer(app)
@@ -13,6 +13,7 @@ const wss = new WebSocketServer({ server })
 app.use(express.json())
 
 app.use('/api/v1/telemetry', telemetryRoutes)
+app.use('/api/v1/users', userRoutes)
 
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(Path.resolve('public')))

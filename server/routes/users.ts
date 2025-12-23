@@ -58,3 +58,5 @@ router.delete('/:id', checkJwt, async (req: JwtRequest, res) => {
     res.status(400).json('Bad DELETE request')
   }
 })
+
+export default router
