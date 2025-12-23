@@ -3,6 +3,7 @@ import { TelemetryProvider } from './Context.tsx'
 import { useEffect } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 import RequireAuth from './RequireAuth.tsx'
+
 function App() {
   const queryClient = useQueryClient()
 

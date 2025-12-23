@@ -16,3 +16,40 @@ export async function getUserByAuth0Id(
     console.log(err)
   }
 }
+
+export async function addUser(user: User): Promise<User | undefined> {
+  try {
+    const result = await db('users').insert(user).returning('*').first()
+
+    return result
+  } catch (err) {
+    console.log(err)
+  }
+}
+
+export async function updateUser(
+  auth0Id: string,
+  newUser: User,
+): Promise<User | undefined> {
+  try {
+    await db('users').where('users.auth0Id', auth0Id).update(newUser)
+
+    const result = await db('users')
+      .where('users.auth0Id', auth0Id)
+      .select()
+      .first()
+
+    return result
+  } catch (err) {
+    console.log(err)
+  }
+}
+
+export async function deleteUser(id: number): Promise<number | undefined> {
+  try {
+    const result = await db('users').where('users.id', id).delete()
+    return result
+  } catch (err) {
+    console.log(err)
+  }
+}
