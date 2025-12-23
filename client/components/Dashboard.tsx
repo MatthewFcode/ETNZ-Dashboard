@@ -1,20 +1,12 @@
 import { useTelemetry } from './Context.tsx'
-import { IfAuthenticated, IfNotAuthenticated } from './Auth0.tsx'
+import { IfAuthenticated } from './Auth0.tsx'
 import { useAuth0 } from '@auth0/auth0-react'
 
 function Dashboard() {
   const { data, isPending, isError } = useTelemetry()
-  const { logout, loginWithRedirect } = useAuth0()
+  const { logout } = useAuth0()
   const handleLogout = () => {
     logout({ logoutParams: { returnTo: window.location.origin } })
-  }
-
-  const handleLogin = () => {
-    loginWithRedirect({
-      authorizationParams: {
-        redirectUri: `${window.location.origin}/registration`,
-      },
-    })
   }
 
   if (isPending) {
@@ -28,9 +20,6 @@ function Dashboard() {
   return (
     <div>
       <div className="dashboard-header">
-        {/* <IfNotAuthenticated>
-          <button onClick={handleLogin}>Sign In</button>
-        </IfNotAuthenticated> */}
         <IfAuthenticated>
           <button onClick={handleLogout}>Sign Out</button>
         </IfAuthenticated>

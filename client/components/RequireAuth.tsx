@@ -5,9 +5,17 @@ function RequireAuth({ children }: { children: ReactNode }) {
   // children will be whatever was inside of it and after checking the auth0 stuff we return whatever was inside of us
   const { isAuthenticated, isLoading, loginWithRedirect } = useAuth0()
 
+  const handleLogin = () => {
+    loginWithRedirect({
+      authorizationParams: {
+        redirectUri: `${window.location.origin}/registration`,
+      },
+    })
+  }
+
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
-      loginWithRedirect()
+      handleLogin()
     }
   }, [isLoading, isAuthenticated, loginWithRedirect])
 
