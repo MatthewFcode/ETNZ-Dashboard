@@ -2,6 +2,7 @@ import Dashboard from './Dashboard.tsx'
 import { TelemetryProvider } from './Context.tsx'
 import { useEffect } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
+import RequireAuth from './RequireAuth.tsx'
 function App() {
   const queryClient = useQueryClient()
 
@@ -53,9 +54,11 @@ function App() {
   return (
     <>
       <div className="app">
-        <TelemetryProvider>
-          <Dashboard />
-        </TelemetryProvider>
+        <RequireAuth>
+          <TelemetryProvider>
+            <Dashboard />
+          </TelemetryProvider>
+        </RequireAuth>
       </div>
     </>
   )
