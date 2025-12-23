@@ -29,3 +29,32 @@ router.post('/', checkJwt, async (req: JwtRequest, res) => {
     res.status(400).json('Bad Post request')
   }
 })
+
+router.patch('/', checkJwt, async (req: JwtRequest, res) => {
+  try {
+    const auth0Id = req.auth?.sub as string
+
+    const user: User = {
+      name: req.body.name,
+      role: req.body.role,
+    }
+
+    const result = await db.updateUser(auth0Id, user)
+
+    res.json(result).status(200)
+  } catch (err) {
+    console.log(err)
+    res.status(400).json('Bad PATCH request')
+  }
+})
+
+router.delete('/:id', checkJwt, async (req: JwtRequest, res) => {
+  try {
+    const id = Number(req.params.id)
+
+    await db.deleteUser(id)
+  } catch (err) {
+    console.log(err)
+    res.status(400).json('Bad DELETE request')
+  }
+})
