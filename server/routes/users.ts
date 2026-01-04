@@ -18,7 +18,9 @@ router.get('/', checkJwt, async (req: JwtRequest, res) => {
 
 router.post('/', checkJwt, async (req: JwtRequest, res) => {
   try {
+    const auth0Id = req.auth?.sub
     const user: User = {
+      auth0Id: auth0Id,
       name: req.body.name,
       role: req.body.role,
     }
