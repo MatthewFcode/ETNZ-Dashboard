@@ -50,11 +50,11 @@ router.patch('/', checkJwt, async (req: JwtRequest, res) => {
   }
 })
 
-router.delete('/:id', checkJwt, async (req: JwtRequest, res) => {
+router.delete('/', checkJwt, async (req: JwtRequest, res) => {
   try {
-    const id = Number(req.params.id)
+    const auth0Id = req.auth?.sub as string
 
-    await db.deleteUser(id)
+    await db.deleteUser(auth0Id)
   } catch (err) {
     console.log(err)
     res.status(400).json('Bad DELETE request')

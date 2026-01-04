@@ -45,9 +45,9 @@ export async function updateUser(
   }
 }
 
-export async function deleteUser(id: number): Promise<number | undefined> {
+export async function deleteUser(auth0Id: string): Promise<number | undefined> {
   try {
-    const result = await db('users').where('users.id', id).delete()
+    const result = await db('users').where('users.auth0Id', auth0Id).delete()
     return result
   } catch (err) {
     console.log(err)
