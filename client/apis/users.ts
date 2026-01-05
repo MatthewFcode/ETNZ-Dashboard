@@ -23,6 +23,23 @@ export async function getUserById(token: string): Promise<User | undefined> {
   }
 }
 
+// api client function for getting all user activity
+export async function getAllUserActivity(
+  token: string,
+): Promise<User | undefined> {
+  try {
+    const result = await request
+      .get(`${rootURL}/users/activity`)
+      .set('Authorization', `Bearer ${token}`)
+    return result.body
+  } catch (err) {
+    console.log(
+      err,
+      'API client function error trying to fetch all user activity',
+    )
+  }
+}
+
 export async function postUser(
   newUser: User,
   token: string,
