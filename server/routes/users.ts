@@ -19,6 +19,19 @@ router.get('/', checkJwt, async (req: JwtRequest, res) => {
   }
 })
 
+//GET route for getting all user information and their activity
+router.get('/activity', checkJwt, async (req: JwtRequest, res) => {
+  try {
+    const result = await db.getAllUserActivity()
+    res.status(200).json(result)
+  } catch (err) {
+    console.log(err)
+    res
+      .status(500)
+      .json('Internal Server Error trying to fetch all user activity')
+  }
+})
+
 router.post('/', checkJwt, async (req: JwtRequest, res) => {
   try {
     const auth0Id = req.auth?.sub
