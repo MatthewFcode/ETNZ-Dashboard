@@ -4,7 +4,7 @@ import { createServer } from 'http'
 import { WebSocketServer } from 'ws'
 
 import telemetryRoutes from './routes/telemetry.ts'
-import userRoutes from './routes/telemetry.ts'
+import userRoutes from './routes/users.ts'
 const app = express()
 
 const server = createServer(app)
