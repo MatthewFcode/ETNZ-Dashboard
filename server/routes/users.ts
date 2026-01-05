@@ -9,6 +9,9 @@ router.get('/', checkJwt, async (req: JwtRequest, res) => {
   try {
     const auth0Id = req.auth?.sub as string
     const user = await db.getUserByAuth0Id(auth0Id)
+
+    await db.updateUserActivity(auth0Id)
+
     res.status(200).json(user)
   } catch (err) {
     res.status(500).json('Internal Server Error')
