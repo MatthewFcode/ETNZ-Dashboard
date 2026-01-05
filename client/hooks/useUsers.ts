@@ -44,3 +44,21 @@ export function usePostUser() {
     return postUser(newUser, token)
   })
 }
+
+//PATCH mutation wrapper function
+export function useUpdateUser() {
+  const { getAccessTokenSilently } = useAuth0()
+  return useUserMutation(async (updatedUser: User) => {
+    const token = await getAccessTokenSilently()
+    return updateUser(updatedUser, token)
+  })
+}
+
+//DELETE mutation wrapper function
+export function useDeleteUset() {
+  const { getAccessTokenSilently } = useAuth0()
+  return useUserMutation(async () => {
+    const token = await getAccessTokenSilently()
+    return deleteUser(token)
+  })
+}
