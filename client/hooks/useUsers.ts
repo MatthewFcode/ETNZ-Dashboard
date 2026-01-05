@@ -6,7 +6,13 @@ import {
 } from '@tanstack/react-query'
 import { useAuth0 } from '@auth0/auth0-react'
 import { User } from '../../models/users.ts'
-import { getUserById, postUser, updateUser, deleteUser } from '../apis/users.ts'
+import {
+  getUserById,
+  postUser,
+  updateUser,
+  deleteUser,
+  getAllUserActivity,
+} from '../apis/users.ts'
 
 export function useGetUserByAuth0Id() {
   const { user, getAccessTokenSilently } = useAuth0()
@@ -15,6 +21,20 @@ export function useGetUserByAuth0Id() {
     queryFn: async () => {
       const token = await getAccessTokenSilently()
       return getUserById(token)
+    },
+    enabled: !!user,
+  })
+  return query
+}
+
+// useQuery hook for getting all user activity
+export function useGetAllUserActivity() {
+  const { user, getAccessTokenSilently } = useAuth0()
+  const query = useQuery({
+    queryKey: ['user-activity'],
+    queryFn: async () => {
+      const token = await getAccessTokenSilently()
+      return getAllUserActivity(token)
     },
     enabled: !!user,
   })
