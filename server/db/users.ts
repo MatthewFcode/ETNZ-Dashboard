@@ -53,3 +53,23 @@ export async function deleteUser(auth0Id: string): Promise<number | undefined> {
     console.log(err)
   }
 }
+
+// ORM functions for updating and getting user activity
+export async function getAllUserActivity(): Promise<User[] | undefined> {
+  try {
+    const result = await db('users').select()
+    return result
+  } catch (err) {
+    console.log(err)
+  }
+}
+
+export async function updateUserActivity(auth0Id: string): Promise<undefined> {
+  try {
+    await db('users')
+      .where('users.auth0Id', auth0Id)
+      .update({ activity_status: new Date().toISOString })
+  } catch (err) {
+    console.log(err)
+  }
+}
