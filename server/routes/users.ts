@@ -41,7 +41,10 @@ router.post('/', checkJwt, async (req: JwtRequest, res) => {
       role: req.body.role,
     }
 
-    res.status(201).json(user)
+    const result = await db.addUser(user)
+
+    res.status(201).json(result)
+    console.log('POST req in express route succcessful')
   } catch (err) {
     console.log(err)
     res.status(400).json('Bad Post request')

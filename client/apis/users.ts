@@ -49,6 +49,7 @@ export async function postUser(
       .post(`${rootURL}/users`)
       .set('Authorization', `Bearer ${token}`)
       .send(newUser)
+    console.log('API client function successful ')
     return result.body
   } catch (err) {
     console.log(

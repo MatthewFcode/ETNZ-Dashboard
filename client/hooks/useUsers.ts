@@ -61,6 +61,7 @@ export function usePostUser() {
 
   return useUserMutation(async (newUser: User) => {
     const token = await getAccessTokenSilently()
+    console.log('post user hook successful')
     return postUser(newUser, token)
   })
 }
