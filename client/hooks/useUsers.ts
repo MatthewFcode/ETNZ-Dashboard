@@ -5,7 +5,7 @@ import {
   MutationFunction,
 } from '@tanstack/react-query'
 import { useAuth0 } from '@auth0/auth0-react'
-import { User } from '../../models/users.ts'
+import { User, UserPayload } from '../../models/users.ts'
 import {
   getUserById,
   postUser,
@@ -59,7 +59,7 @@ export function useUserMutation<TData = unknown, TVariables = unknown>(
 export function usePostUser() {
   const { getAccessTokenSilently } = useAuth0()
 
-  return useUserMutation(async (newUser: User) => {
+  return useUserMutation(async (newUser: UserPayload) => {
     const token = await getAccessTokenSilently()
     console.log('post user hook successful')
     return postUser(newUser, token)

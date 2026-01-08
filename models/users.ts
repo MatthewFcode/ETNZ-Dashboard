@@ -4,5 +4,12 @@ export interface User {
   name: string
   role: string
   profile_photo?: string
-  activity_status?: string
+  activity_status?: string | File
+}
+
+export interface UserPayload {
+  auth0Id?: string
+  name: string
+  role: string
+  file: File
 }

@@ -1,5 +1,5 @@
 import request from 'superagent'
-import { User } from '../../models/users.ts'
+import { User, UserPayload } from '../../models/users.ts'
 
 // const rootURL =
 //   typeof document !== 'undefined'
@@ -41,7 +41,7 @@ export async function getAllUserActivity(
 }
 
 export async function postUser(
-  newUser: User,
+  newUser: UserPayload,
   token: string,
 ): Promise<User | undefined> {
   try {

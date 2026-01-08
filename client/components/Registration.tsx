@@ -12,7 +12,7 @@ function Registraton() {
   const [form, setForm] = useState({
     name: '',
     role: '',
-    //file: null as File | null,
+    file: null as File | null,
   })
 
   const handleChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
@@ -23,22 +23,29 @@ function Registraton() {
     })
   }
 
-  // function handleFileChange(evt: React.ChangeEvent<HTMLInputElement>) {
-  //   if (evt.target.files && evt.target.files[0]) {
-  //     setForm({ ...form, file: evt.target.files[0] })
-  //   }
-  // }
+  function handleFileChange(evt: React.ChangeEvent<HTMLInputElement>) {
+    if (evt.target.files && evt.target.files[0]) {
+      setForm({ ...form, file: evt.target.files[0] })
+    }
+  }
   const handleSubmit = async (evt: React.FormEvent<HTMLFormElement>) => {
     // const token = await getAccessTokenSilently()
     evt.preventDefault()
 
-    const newUser = {
-      name: form.name,
-      role: form.role,
-      //profile_photo: form.file,
+    // const newUser = {
+    //   name: form.name,
+    //   role: form.role,
+    //   profile_photo: form.file
+    // }
+    const formData = new FormData()
+    formData.append('name', form.name)
+    formData.append('role', form.role)
+
+    if (form.file) {
+      formData.append('profile_photo', form.file)
     }
 
-    postUser.mutate(newUser, {
+    postUser.mutate(formData, {
       onSuccess: () => {
         navigate('/')
       },
@@ -78,16 +85,16 @@ function Registraton() {
             />
           </div>
 
-          {/* <div>
-          <label htmlFor="file">Upload a file..</label>
-          <input
-            type="file"
-            id="file"
-            name="file"
-            value={form.file}
-            onChange={handleFileChange}
-          />
-        </div> */}
+          <div>
+            <label htmlFor="file">Upload a file..</label>
+            <input
+              type="file"
+              id="file"
+              name="file"
+              value={form.file}
+              onChange={handleFileChange}
+            />
+          </div>
           <button type="submit" disabled={!form.name}>
             ⛵Create Account⛵
           </button>
