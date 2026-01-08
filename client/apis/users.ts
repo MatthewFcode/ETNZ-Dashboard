@@ -26,7 +26,7 @@ export async function getUserById(token: string): Promise<User | undefined> {
 // api client function for getting all user activity
 export async function getAllUserActivity(
   token: string,
-): Promise<User | undefined> {
+): Promise<User[] | undefined> {
   try {
     const result = await request
       .get(`${rootURL}/users/activity`)

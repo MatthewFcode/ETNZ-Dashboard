@@ -17,9 +17,9 @@ export async function getUserByAuth0Id(
   }
 }
 
-export async function addUser(user: User): Promise<User | undefined> {
+export async function addUser(user: User): Promise<User[] | undefined> {
   try {
-    const result = await db('users').insert(user).returning('*').first()
+    const result = await db('users').insert(user).returning('*')
 
     return result
   } catch (err) {

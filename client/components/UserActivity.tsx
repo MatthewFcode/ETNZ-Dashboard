@@ -16,13 +16,13 @@ function UserActivity() {
   return (
     <div>
       <ul>
-        {data?.map((d: User, i: number) => {
-          ;<li key={i}>
+        {data?.map((d: User, i: number) => (
+          <li key={i}>
             <div>{d.name}</div>
             <div>{d.role}</div>
             <div>{d.activity_status}</div>
           </li>
-        })}
+        ))}
       </ul>
     </div>
   )
