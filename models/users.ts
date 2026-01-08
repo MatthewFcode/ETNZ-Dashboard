@@ -3,5 +3,6 @@ export interface User {
   id?: number
   name: string
   role: string
+  profile_photo?: string
   activity_status?: string
 }

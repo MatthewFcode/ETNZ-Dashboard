@@ -2,8 +2,11 @@ import { Router } from 'express'
 import { User } from '../../models/users.ts'
 import * as db from '../db/users.ts'
 import checkJwt, { JwtRequest } from '../auth0.ts'
-
+import multer from 'multer'
+import cloudinary from '../cloudinary.js'
+import { unlink } from 'node:fs/promises'
 const router = Router()
+const upload = multer({ dest: '/tmp' })
 
 router.get('/', checkJwt, async (req: JwtRequest, res) => {
   try {
@@ -32,24 +35,57 @@ router.get('/activity', checkJwt, async (req: JwtRequest, res) => {
   }
 })
 
-router.post('/', checkJwt, async (req: JwtRequest, res) => {
-  try {
-    const auth0Id = req.auth?.sub
-    const user: User = {
-      auth0Id: auth0Id,
-      name: req.body.name,
-      role: req.body.role,
+router.post(
+  '/',
+  checkJwt,
+  upload.single('profile_photo'),
+  async (req: JwtRequest, res) => {
+    try {
+      const auth0Id = req.auth?.sub
+      let profile_photo = ''
+      if (req.file) {
+        try {
+          // Upload to Cloudinary
+          const result = await cloudinary.uploader.upload(req.file.path, {
+            folder: 'ETNZ',
+            transformation: [{ width: 300, height: 300, crop: 'fill' }],
+          })
+          profile_photo = result.secure_url
+
+          // Clean up temp file
+          await unlink(req.file.path)
+        } catch (uploadErr) {
+          console.error('Cloudinary upload error:', uploadErr)
+          // Clean up temp file even if upload fails
+          try {
+            await unlink(req.file.path)
+          } catch (unlinkErr) {
+            console.error('Failed to delete temp file:', unlinkErr)
+          }
+          throw new Error('Failed to upload image')
+        }
+      }
+
+      console.log(profile_photo)
+
+      const user: User = {
+        auth0Id: auth0Id,
+        name: req.body.name,
+        role: req.body.role,
+        profile_photo: profile_photo,
+        activity_status: new Date().toString(),
+      }
+
+      const result = await db.addUser(user)
+
+      res.status(201).json(result)
+      console.log('POST req in express route succcessful')
+    } catch (err) {
+      console.log(err)
+      res.status(400).json('Bad Post request')
     }
-
-    const result = await db.addUser(user)
-
-    res.status(201).json(result)
-    console.log('POST req in express route succcessful')
-  } catch (err) {
-    console.log(err)
-    res.status(400).json('Bad Post request')
-  }
-})
+  },
+)
 
 router.patch('/', checkJwt, async (req: JwtRequest, res) => {
   try {

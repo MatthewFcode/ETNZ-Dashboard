@@ -8,6 +8,7 @@ export async function up(knex) {
     table.string('auth0Id').notNullable()
     table.string('name')
     table.string('role')
+    table.string('profile_photo')
     table.string('activity_status')
   })
 }

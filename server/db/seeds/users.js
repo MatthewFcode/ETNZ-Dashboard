@@ -10,6 +10,7 @@ export async function seed(knex) {
       auth0Id: 'auth0|test-user-id',
       name: 'Matthew',
       role: 'Software Engineer',
+      profile_photo: '/images/matthew.JPG',
       activity_status: 'now',
     },
   ])
