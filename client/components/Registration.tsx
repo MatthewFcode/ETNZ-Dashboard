@@ -53,8 +53,6 @@ function Registraton() {
         console.error('Failed to create user', err)
       },
     })
-
-    navigate('/')
   }
 
   return (

@@ -41,6 +41,9 @@ router.post(
   upload.single('profile_photo'),
   async (req: JwtRequest, res) => {
     try {
+      console.log('AUTH:', req.auth)
+      console.log('BODY:', req.body)
+      console.log('FILE:', req.file)
       const auth0Id = req.auth?.sub
       let profile_photo = ''
       if (req.file) {
@@ -110,6 +113,7 @@ router.delete('/', checkJwt, async (req: JwtRequest, res) => {
     const auth0Id = req.auth?.sub as string
 
     await db.deleteUser(auth0Id)
+    res.sendStatus(204)
   } catch (err) {
     console.log(err)
     res.status(400).json('Bad DELETE request')

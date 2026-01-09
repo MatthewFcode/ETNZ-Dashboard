@@ -41,15 +41,15 @@ export async function getAllUserActivity(
 }
 
 export async function postUser(
-  newUser: FormData,
+  formData: FormData,
   token: string,
 ): Promise<User | undefined> {
   try {
     const result = await request
       .post(`${rootURL}/users`)
       .set('Authorization', `Bearer ${token}`)
-      .send(newUser)
-    console.log('API client function successful ')
+      .send(formData)
+    console.log('API client function successful')
     return result.body
   } catch (err) {
     console.log(

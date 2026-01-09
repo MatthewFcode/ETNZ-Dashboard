@@ -2,6 +2,7 @@ import { useTelemetry } from './Context.tsx'
 import { IfAuthenticated } from './Auth0.tsx'
 import { useAuth0 } from '@auth0/auth0-react'
 import LoadingSpinner from './LoadingSpinner.tsx'
+import UserActivity from './UserActivity.tsx'
 
 function Dashboard() {
   const { data, isPending, isError } = useTelemetry()
@@ -69,6 +70,7 @@ function Dashboard() {
           </div>
         ))}
       </div>
+      <UserActivity />
     </div>
   )
 }
