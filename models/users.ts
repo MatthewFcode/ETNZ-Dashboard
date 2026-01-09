@@ -4,7 +4,7 @@ export interface User {
   name: string
   role: string
   profile_photo?: string
-  activity_status?: string | File
+  activity_status?: string
 }
 
 export interface UserPayload {

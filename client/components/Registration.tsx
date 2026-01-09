@@ -61,7 +61,7 @@ function Registraton() {
     <>
       <IfAuthenticated>
         <h1>🏎️ Create your ETNZ race hub account 🏎️ </h1>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} encType="multipart/form-data">
           <div>
             <label htmlFor="name">What is your name?</label>
             <input
@@ -91,7 +91,6 @@ function Registraton() {
               type="file"
               id="file"
               name="file"
-              value={form.file}
               onChange={handleFileChange}
             />
           </div>

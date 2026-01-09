@@ -21,6 +21,7 @@ function UserActivity() {
             <div>{d.name}</div>
             <div>{d.role}</div>
             <div>{d.activity_status}</div>
+            <img src={d.profile_photo} alt="profile-image" />
           </li>
         ))}
       </ul>
