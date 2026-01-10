@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { User, UserBackend } from '../../models/users.ts'
+import { UserBackend } from '../../models/users.ts'
 import * as db from '../db/users.ts'
 import checkJwt, { JwtRequest } from '../auth0.ts'
 import multer from 'multer'
@@ -71,12 +71,11 @@ router.post(
 
       console.log(profile_photo)
 
-      const user: User = {
+      const user: UserBackend = {
         auth0Id: auth0Id,
         name: req.body.name,
         role: req.body.role,
         profile_photo: profile_photo,
-        activity_status: new Date().toString(),
       }
 
       const result = await db.addUser(user)

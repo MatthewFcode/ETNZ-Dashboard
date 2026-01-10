@@ -17,7 +17,7 @@ export async function getUserByAuth0Id(
   }
 }
 
-export async function addUser(user: User): Promise<User[] | undefined> {
+export async function addUser(user: UserBackend): Promise<User[] | undefined> {
   try {
     const result = await db('users').insert(user).returning('*')
 
@@ -68,7 +68,7 @@ export async function updateUserActivity(auth0Id: string): Promise<undefined> {
   try {
     await db('users')
       .where('users.auth0Id', auth0Id)
-      .update({ activity_status: new Date().toISOString() })
+      .update({ activity_status: db.fn.now() })
   } catch (err) {
     console.log(err)
   }
