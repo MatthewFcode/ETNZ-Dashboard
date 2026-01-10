@@ -9,7 +9,7 @@ export async function up(knex) {
     table.string('name')
     table.string('role')
     table.string('profile_photo')
-    table.string('activity_status')
+    table.timestamp('activity_status').defaultTo(knex.fn.now())
   })
 }
 
