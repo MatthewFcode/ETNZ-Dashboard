@@ -93,6 +93,8 @@ router.patch('/', checkJwt, async (req: JwtRequest, res) => {
   try {
     const auth0Id = req.auth?.sub as string
 
+    await db.updateUserActivity(auth0Id)
+
     const user: UserBackend = {
       name: req.body.name,
       role: req.body.role,
