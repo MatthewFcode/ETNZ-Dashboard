@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { User } from '../../models/users.ts'
+import { User, UserBackend } from '../../models/users.ts'
 import * as db from '../db/users.ts'
 import checkJwt, { JwtRequest } from '../auth0.ts'
 import multer from 'multer'
@@ -94,7 +94,7 @@ router.patch('/', checkJwt, async (req: JwtRequest, res) => {
   try {
     const auth0Id = req.auth?.sub as string
 
-    const user: User = {
+    const user: UserBackend = {
       name: req.body.name,
       role: req.body.role,
     }

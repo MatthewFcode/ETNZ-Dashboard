@@ -6,8 +6,8 @@ import { JwtPayload } from 'jsonwebtoken'
 import jwks from 'jwks-rsa'
 
 // TODO: set the domain and audience (API Identifier)
-const domain = 'https://matthew-matai-2025.au.auth0.com'
-const audience = 'https://etnz/api'
+const domain = 'etnz.au.auth0.com'
+const audience = 'https://etnz-init/api'
 
 const isTest = process.env.NODE_ENV === 'test'
 

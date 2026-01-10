@@ -4,7 +4,7 @@ export interface User {
   name: string
   role: string
   profile_photo?: string
-  activity_status?: string
+  activity_status: string
 }
 
 export interface UserPayload {
@@ -12,4 +12,13 @@ export interface UserPayload {
   name: string
   role: string
   file: File
+}
+
+export interface UserBackend {
+  auth0Id?: string
+  id?: number
+  name: string
+  role: string
+  profile_photo?: string
+  activity_status?: string
 }

@@ -10,14 +10,33 @@ const queryClient = new QueryClient()
 
 const router = createBrowserRouter(routes)
 
+// document.addEventListener('DOMContentLoaded', () => {
+//   createRoot(document.getElementById('app') as HTMLElement).render(
+//     <Auth0Provider
+//       domain="matthew-matai-2025.au.auth0.com"
+//       clientId="zIkhlLSHHoLPSFnayPHy13B1dqj8DGKq"
+//       authorizationParams={{
+//         redirect_uri: window.location.origin,
+//         audience: 'https://etnz/api',
+//       }}
+//     >
+//       <QueryClientProvider client={queryClient}>
+//         <RouterProvider router={router} />
+//         <ReactQueryDevtools />
+//       </QueryClientProvider>
+//       ,
+//     </Auth0Provider>,
+//   )
+// })
+
 document.addEventListener('DOMContentLoaded', () => {
   createRoot(document.getElementById('app') as HTMLElement).render(
     <Auth0Provider
-      domain="matthew-matai-2025.au.auth0.com"
-      clientId="zIkhlLSHHoLPSFnayPHy13B1dqj8DGKq"
+      domain="etnz.au.auth0.com"
+      clientId="1BFvu9VowQuEITwIQpcnQezVf3sljQVL"
       authorizationParams={{
         redirect_uri: window.location.origin,
-        audience: 'https://etnz/api',
+        audience: 'https://etnz-init/api',
       }}
     >
       <QueryClientProvider client={queryClient}>
