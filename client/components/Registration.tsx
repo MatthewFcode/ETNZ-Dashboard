@@ -87,8 +87,8 @@ function Registraton() {
             <label htmlFor="file">Upload a file..</label>
             <input
               type="file"
-              id="file"
-              name="file"
+              id="profile_photo"
+              name="profile_photo"
               onChange={handleFileChange}
             />
           </div>
