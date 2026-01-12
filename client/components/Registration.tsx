@@ -42,7 +42,7 @@ function Registraton() {
     formData.append('role', form.role)
 
     if (form.file) {
-      formData.append('profile_photo', form.file)
+      formData.append('file', form.file)
     }
 
     postUser.mutate(formData, {
