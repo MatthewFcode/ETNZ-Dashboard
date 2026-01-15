@@ -7,7 +7,7 @@ import {
 import { useAuth0 } from '@auth0/auth0-react'
 import { getAllChats, postChat, deleteChat } from '../apis/chats.ts'
 
-//custom hook useQuery for getting all the chats gonna get the acccess token silently and send that bpmbilart motherfucking thing nigger
+//custom hook useQuery for getting all the chats
 export function useGetAllChats() {
   const { getAccessTokenSilently, user } = useAuth0()
   const query = useQuery({

@@ -50,15 +50,15 @@ function Chat() {
   return (
     <div>
       <div>
-        {data?.map((d: GetChat, index: number) => (
+        {data?.map((d: GetChat) => (
           <>
-            <li key={index}>
+            <li key={d.id}>
               <img src={d.profile_photo} alt={`${d.name} profile imagge`} />
               <p>{d.name}</p>
               <p>{d.message}</p>
               <div>{d.time_sent}</div>
             </li>
-            <button onClick={() => deleteChat.mutate(d.id)}>DELETE</button>
+            <button onClick={() => deleteChat.mutate(d.id!)}>DELETE</button>
           </>
         ))}
       </div>
@@ -77,3 +77,4 @@ function Chat() {
     </div>
   )
 }
+export default Chat

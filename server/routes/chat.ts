@@ -24,7 +24,7 @@ router.post('/', checkJwt, async (req: JwtRequest, res) => {
       message: req.body.message,
     }
 
-    const result = db.postChat(message)
+    const result = await db.postChat(message)
 
     res.status(201).json(result)
   } catch (err) {
