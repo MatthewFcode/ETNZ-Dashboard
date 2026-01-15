@@ -45,14 +45,12 @@ function Registraton() {
       formData.append('file', form.file)
     }
 
-    postUser.mutate(formData, {
-      onSuccess: () => {
-        navigate('/')
-      },
-      onError: (err) => {
-        console.error('Failed to create user', err)
-      },
-    })
+    try {
+      await postUser.mutateAsync(formData)
+      navigate('/')
+    } catch (err) {
+      console.error(err)
+    }
   }
 
   return (
@@ -97,7 +95,7 @@ function Registraton() {
               />
             </div>
             <button type="submit" disabled={!form.name}>
-              ⛵Create Account⛵
+              Create Account
             </button>
           </form>
         </IfAuthenticated>
