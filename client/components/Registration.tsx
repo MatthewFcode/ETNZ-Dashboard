@@ -56,53 +56,58 @@ function Registraton() {
   }
 
   return (
-    <>
-      <IfAuthenticated>
-        <h1>🏎️ Create your ETNZ race hub account 🏎️ </h1>
-        <form onSubmit={handleSubmit} encType="multipart/form-data">
-          <div>
-            <label htmlFor="name">What is your name?</label>
-            <input
-              type="text"
-              id="name"
-              name="name"
-              value={form.name}
-              onChange={handleChange}
-              placeholder="..Matthew"
-            />
-          </div>
-          <div>
-            <label htmlFor="role">What is your role?</label>
-            <input
-              type="text"
-              id="role"
-              name="role"
-              value={form.role}
-              onChange={handleChange}
-              placeholder="..Captain"
-            />
-          </div>
+    <div className="registration">
+      <video autoPlay muted loop className="background-video">
+        <source src="/videos/etnz-sunshine.mp4" type="video/mp4" />
+      </video>
+      <div className="content">
+        <IfAuthenticated>
+          <h1>Create your ETNZ race ❗hub account❗</h1>
+          <form onSubmit={handleSubmit} encType="multipart/form-data">
+            <div>
+              <label htmlFor="name">What is your name?</label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                value={form.name}
+                onChange={handleChange}
+                placeholder="..Matthew"
+              />
+            </div>
+            <div>
+              <label htmlFor="role">What is your role?</label>
+              <input
+                type="text"
+                id="role"
+                name="role"
+                value={form.role}
+                onChange={handleChange}
+                placeholder="..Captain"
+              />
+            </div>
 
+            <div>
+              <label htmlFor="file">Upload a file..</label>
+              <input
+                type="file"
+                id="profile_photo"
+                name="profile_photo"
+                onChange={handleFileChange}
+              />
+            </div>
+            <button type="submit" disabled={!form.name}>
+              ⛵Create Account⛵
+            </button>
+          </form>
+        </IfAuthenticated>
+        <IfNotAuthenticated>
           <div>
-            <label htmlFor="file">Upload a file..</label>
-            <input
-              type="file"
-              id="profile_photo"
-              name="profile_photo"
-              onChange={handleFileChange}
-            />
+            <h1>❗Go back and authenticate yourself❗</h1>
           </div>
-          <button type="submit" disabled={!form.name}>
-            ⛵Create Account⛵
-          </button>
-        </form>
-      </IfAuthenticated>
-      <IfNotAuthenticated>
-        <div>
-          <h1>❗Go back and authenticate yourself❗</h1>
-        </div>
-      </IfNotAuthenticated>
-    </>
+        </IfNotAuthenticated>
+      </div>
+    </div>
   )
 }
 
