@@ -41,10 +41,11 @@ router.post(
   upload.single('profile_photo'),
   async (req: JwtRequest, res) => {
     try {
-      console.log('AUTH:', req.auth)
+      const auth0Id = req.auth?.sub
+      console.log('AUTH:', auth0Id)
       console.log('BODY:', req.body)
       console.log('FILE:', req.file)
-      const auth0Id = req.auth?.sub
+
       let profile_photo = ''
       if (req.file) {
         try {
