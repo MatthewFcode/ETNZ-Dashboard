@@ -7,7 +7,13 @@ export async function getAllChats(): Promise<GetChat[] | undefined> {
   try {
     const result = await db('chat')
       .join('users', 'chat.auth0Id', 'users.auth0Id')
-      .select('message', 'time_sent', 'users.name', 'users.profile_photo')
+      .select(
+        'chat.id',
+        'message',
+        'time_sent',
+        'users.name',
+        'users.profile_photo',
+      )
       .orderBy('chat.time_sent', 'desc')
 
     return result

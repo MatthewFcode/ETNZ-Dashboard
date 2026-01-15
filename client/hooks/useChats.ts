@@ -6,7 +6,6 @@ import {
 } from '@tanstack/react-query'
 import { useAuth0 } from '@auth0/auth0-react'
 import { getAllChats, postChat, deleteChat } from '../apis/chats.ts'
-import { PostChat } from '../../models/chat.ts'
 
 //custom hook useQuery for getting all the chats gonna get the acccess token silently and send that bpmbilart motherfucking thing nigger
 export function useGetAllChats() {
@@ -40,7 +39,7 @@ export function useChatMutation<TData = unknown, TVariables = unknown>(
 // post wrapper function
 export function usePostChat() {
   const { getAccessTokenSilently } = useAuth0()
-  async function postChatInit(chat: PostChat) {
+  async function postChatInit(chat: { message: string }) {
     const token = await getAccessTokenSilently()
     return postChat(chat, token)
   }

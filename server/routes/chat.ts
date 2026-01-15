@@ -36,9 +36,9 @@ router.post('/', checkJwt, async (req: JwtRequest, res) => {
 router.delete('/:id', checkJwt, async (req: JwtRequest, res) => {
   try {
     const id = Number(req.params.id)
-    const result = await db.deleteChat(id)
+    await db.deleteChat(id)
 
-    res.status(204).json(result)
+    res.sendStatus(204)
   } catch (err) {
     res.status(400).json('Bad DELETE request')
     console.log('Error in the DELETE chat express route')

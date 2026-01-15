@@ -17,7 +17,7 @@ export async function getAllChats(
 }
 
 export async function postChat(
-  chat: PostChat,
+  chat: { message: string },
   token: string,
 ): Promise<PostChat | undefined> {
   try {
@@ -38,8 +38,8 @@ export async function deleteChat(
   try {
     const result = await request
       .delete(`${rootURL}/chat/${id}`)
-      .set('Atuhorization', `Bearer ${token}`)
-    return result.body
+      .set('Authorization', `Bearer ${token}`)
+    return result.status
   } catch (err) {
     console.log('DELETE request error in the client side API functions ')
   }
