@@ -1,0 +1,48 @@
+import * as db from '../db/chat.ts'
+import { Router } from 'express'
+import checkJwt, { JwtRequest } from '../auth0.ts'
+import { PostChat, GetChat } from '../../models/chat.ts'
+
+const router = Router()
+
+router.get('/', checkJwt, async (req: JwtRequest, res) => {
+  try {
+    const result: GetChat[] | undefined = await db.getAllChats()
+
+    res.status(200).json(result)
+  } catch (err) {
+    res.status(500).json('Internal Server Error')
+    console.log('Error in the GET chat express route', err)
+  }
+})
+
+router.post('/', checkJwt, async (req: JwtRequest, res) => {
+  try {
+    const auth0Id = req.auth?.sub
+    const message: PostChat = {
+      auth0Id: auth0Id!,
+      message: req.body.message,
+    }
+
+    const result = db.postChat(message)
+
+    res.status(201).json(result)
+  } catch (err) {
+    res.status(400).json('Bad POST request')
+    console.log('Error in the POST chat express route', err)
+  }
+})
+
+router.delete('/:id', checkJwt, async (req: JwtRequest, res) => {
+  try {
+    const id = Number(req.params.id)
+    const result = await db.deleteChat(id)
+
+    res.status(204).json(result)
+  } catch (err) {
+    res.status(400).json('Bad DELETE request')
+    console.log('Error in the DELETE chat express route')
+  }
+})
+
+export default router
