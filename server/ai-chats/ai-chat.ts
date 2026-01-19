@@ -58,6 +58,10 @@ const generateChats = async (): Promise<Chat | undefined> => {
 
     const allChats = await getAllChats()
 
+    const conversation = allChats!
+      .map((chat) => `${chat.auth0Id}: ${chat.message}`)
+      .join('\n')
+
     const lastChat: Chat = allChats![allChats!.length - 1]
 
     const eligibleUsers = allUsers!.filter(
@@ -67,15 +71,16 @@ const generateChats = async (): Promise<Chat | undefined> => {
     const respondingUser =
       eligibleUsers[Math.floor(Math.random() * eligibleUsers.length)]
 
-    const prompt = `You are continuing a conversation amongst multiple users, this is the entire conversation so far ${allChats}. Come up with a response as if you were ${respondingUser.name}. The message should be relevant and respond to the last message. Only provide the message text and nothing else.`
+    const prompt = `You are continuing a conversation amongst multiple users, this is the entire conversation so far ${conversation}. Come up with a response as if you were ${respondingUser.name}. The message should be relevant and respond to the last message. Only provide the message text and nothing else.`
 
     const response = await model.invoke(prompt)
-    const messageContent = Array.isArray(response.content)
-      ? response.content
-          .map((block) => (typeof block === 'string' ? block : ''))
-          .join(' ')
-          .trim()
-      : response.content.trim()
+    const messageContent =
+      typeof response.content === 'string'
+        ? response.content.trim()
+        : response.content
+            .map((block) => ('text' in block ? block.text : ''))
+            .join('')
+            .trim()
 
     const newChat: Chat = {
       auth0Id: respondingUser.auth0Id,
