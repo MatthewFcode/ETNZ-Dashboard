@@ -1,5 +1,7 @@
 import { ChatGoogleGenerativeAI } from '@langchain/google-genai'
 import connection from '../db/connection.ts'
+import { wss } from '../server.ts'
+import ws from 'ws'
 
 const db = connection
 
@@ -52,13 +54,13 @@ const getAllChats = async (): Promise<Chat[] | undefined> => {
 // we need to update user activity when we send a chat aswell
 const generateChats = async (): Promise<Chat | undefined> => {
   try {
-    const allUsers = getAllUsers()
+    const allUsers = await getAllUsers()
 
-    const allChats = getAllChats()
+    const allChats = await getAllChats()
 
-    const lastChat: Chat = allChats[allChats.length - 1]
+    const lastChat: Chat = allChats![allChats!.length - 1]
 
-    const eligibleUsers = allUsers.filter(
+    const eligibleUsers = allUsers!.filter(
       (u: User) => u.auth0Id !== lastChat.auth0Id,
     )
 
@@ -68,17 +70,45 @@ const generateChats = async (): Promise<Chat | undefined> => {
     const prompt = `You are continuing a conversation amongst multiple users, this is the entire conversation so far ${allChats}. Come up with a response as if you were ${respondingUser.name}. The message should be relevant and respond to the last message. Only provide the message text and nothing else.`
 
     const response = await model.invoke(prompt)
-    const messageText = response.content?.trim()
+    const messageContent = Array.isArray(response.content)
+      ? response.content
+          .map((block) => (typeof block === 'string' ? block : ''))
+          .join(' ')
+          .trim()
+      : response.content.trim()
 
     const newChat: Chat = {
       auth0Id: respondingUser.auth0Id,
-      message: messageText,
+      message: messageContent,
       time_sent: new Date().toISOString(),
     }
+
+    await db('users')
+      .where('users.auth0Id', respondingUser.auth0Id)
+      .update({ activity_status: db.fn.now() })
 
     return newChat
   } catch (err) {
     console.error('Error generating next chat:', err)
     return undefined
   }
+}
+
+export function chatGenerator() {
+  setTimeout(async () => {
+    const newChat = await generateChats()
+
+    await db('chat').insert(newChat)
+
+    wss.clients.forEach((client) => {
+      if (client.readyState === ws.OPEN) {
+        client.send(
+          JSON.stringify({
+            type: 'database_change',
+            message: 'New AI chat',
+          }),
+        )
+      }
+    })
+  }, 20000)
 }
