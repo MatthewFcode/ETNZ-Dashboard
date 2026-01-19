@@ -28,6 +28,7 @@
   },
   "dependencies": {
     "@auth0/auth0-react": "^2.8.0",
+    "@langchain/google-genai": "^2.1.10",
     "camelcase-keys": "^10.0.1",
     "cloudinary": "^2.8.0",
     "dotenv": "^17.2.3",
@@ -36,6 +37,7 @@
     "http-status-codes": "^2.3.0",
     "jwks-rsa": "^3.2.0",
     "knex": "^2.5.1",
+    "langchain": "^1.2.10",
     "multer": "^2.0.2",
     "nock": "^14.0.10",
     "snakecase-keys": "^9.0.2",
