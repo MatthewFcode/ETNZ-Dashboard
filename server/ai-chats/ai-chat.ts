@@ -2,6 +2,7 @@ import { ChatGoogleGenerativeAI } from '@langchain/google-genai'
 import connection from '../db/connection.ts'
 import { wss } from '../server.ts'
 import ws from 'ws'
+import 'dotenv/config'
 
 const db = connection
 
