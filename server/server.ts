@@ -1,8 +1,8 @@
+import 'dotenv/config'
 import express from 'express'
 import * as Path from 'node:path'
 import { createServer } from 'http'
 import { WebSocketServer } from 'ws'
-
 import telemetryRoutes from './routes/telemetry.ts'
 import userRoutes from './routes/users.ts'
 import chatRoutes from './routes/chat.ts'

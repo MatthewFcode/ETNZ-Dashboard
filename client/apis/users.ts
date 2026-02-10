@@ -1,11 +1,11 @@
 import request from 'superagent'
 import { User } from '../../models/users.ts'
 
-const rootURL =
-  typeof document !== 'undefined'
-    ? new URL(`/api/v1`, document.baseURI)
-    : 'http://localhost:3000/api/v1'
-// const rootURL = '/api/v1'
+// const rootURL =
+//   typeof document !== 'undefined'
+//     ? new URL(`/api/v1`, document.baseURI)
+//     : 'http://localhost:3000/api/v1'
+const rootURL = '/api/v1'
 
 console.log('POST URL:', `${rootURL}/users`)
 

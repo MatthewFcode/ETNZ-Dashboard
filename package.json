@@ -30,7 +30,7 @@
     "@auth0/auth0-react": "^2.8.0",
     "@langchain/google-genai": "^2.1.10",
     "camelcase-keys": "^10.0.1",
-    "cloudinary": "^2.8.0",
+    "cloudinary": "^2.9.0",
     "dotenv": "^17.2.3",
     "express": "^4.17.2",
     "express-jwt": "^8.5.1",
