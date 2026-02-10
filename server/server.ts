@@ -1,4 +1,4 @@
-import 'dotenv/config'
+import 'dotenv/config' // importing dotenv vars and injects them into process.env  everywhere in the server
 import express from 'express'
 import * as Path from 'node:path'
 import { createServer } from 'http'
