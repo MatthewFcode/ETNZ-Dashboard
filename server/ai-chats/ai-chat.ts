@@ -8,8 +8,9 @@ const db = connection // db connection for connecting the knex ORM and being abl
 
 const model = new ChatGoogleGenerativeAI({
   // LLM model client
-  model: 'gemini-1.5-flash',
+  model: 'models/gemini-flash-latest',
   temperature: 0.7,
+  apiKey: process.env.GOOGLE_API_KEY,
 })
 
 // I want to first get all the seed userss I guess so we are gong to get all the users
@@ -110,6 +111,7 @@ export function chatGenerator() {
 
     await db('chat').insert(newChat) // inserts the new chat into the chat table
 
+    console.log('AI chat generator started')
     wss.clients.forEach((client) => {
       // loops through the clients and send the database change
       if (client.readyState === ws.OPEN) {
