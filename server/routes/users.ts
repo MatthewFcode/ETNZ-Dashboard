@@ -5,7 +5,7 @@ import checkJwt, { JwtRequest } from '../auth0.ts'
 import multer from 'multer'
 import cloudinary from '../cloudinary.js'
 import { unlink } from 'node:fs/promises'
-import dotenv from 'dotenv'
+//import dotenv from 'dotenv'
 
 const router = Router()
 const upload = multer({ dest: 'tmp' })
@@ -13,7 +13,6 @@ const upload = multer({ dest: 'tmp' })
 //dotenv.config()
 
 console.log('Cloudinary:', process.env.CLOUDINARY_CLOUD_NAME)
-
 
 router.get('/', checkJwt, async (req: JwtRequest, res) => {
   try {

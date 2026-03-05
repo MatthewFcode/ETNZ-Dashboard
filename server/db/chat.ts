@@ -28,9 +28,11 @@ export async function getAllChats(): Promise<GetChat[] | undefined> {
 //Update knex function for updating a chat by its chat ID and but the user init
 // export async function updateChat(chat: PostChat)
 // we need a post function for posting a chat which will just be a chat object with the message and the auth0Id
-export async function postChat(chat: PostChat): Promise<PostChat | undefined> {
+export async function postChat(
+  chat: PostChat,
+): Promise<PostChat[] | undefined> {
   try {
-    const result = await db('chat').insert(chat).returning('*').first()
+    const result = await db('chat').insert(chat).returning('*')
     return result
   } catch (err) {
     console.log(
