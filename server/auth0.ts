@@ -13,17 +13,20 @@ const isTest = process.env.NODE_ENV === 'test'
 
 const checkJwt = isTest
   ? jwt({ secret: 'test-secret', algorithms: ['HS256'] })
-  : jwt({
-      secret: jwks.expressJwtSecret({
-        cache: true,
-        rateLimit: true,
-        jwksRequestsPerMinute: 5,
-        jwksUri: `${domain}/.well-known/jwks.json`,
-      }) as GetVerificationKey,
-      audience: audience,
-      issuer: `${domain}/`,
-      algorithms: ['RS256'],
-    })
+  : (req: Request, res: any, next: any) => {
+      console.log('JWT Check hit for', req.path)
+      return jwt({
+        secret: jwks.expressJwtSecret({
+          cache: true,
+          rateLimit: true,
+          jwksRequestsPerMinute: 5,
+          jwksUri: `${domain}/.well-known/jwks.json`,
+        }) as GetVerificationKey,
+        audience: audience,
+        issuer: `${domain}/`,
+        algorithms: ['RS256'],
+      })(req, res, next)
+    }
 
 export default checkJwt
 

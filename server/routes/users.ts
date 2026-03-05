@@ -43,6 +43,10 @@ router.get('/activity', checkJwt, async (req: JwtRequest, res) => {
 
 router.post(
   '/',
+  (req, res, next) => {
+    console.log('POST /api/v1/users hit')
+    next()
+  },
   checkJwt,
   upload.single('profile_photo'),
   async (req: JwtRequest, res) => {
