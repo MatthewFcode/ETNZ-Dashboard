@@ -8,7 +8,7 @@ import { unlink } from 'node:fs/promises'
 //import dotenv from 'dotenv'
 
 const router = Router()
-const upload = multer({ dest: '/tmp' })
+const upload = multer({ dest: 'tmp' })
 
 //dotenv.config()
 
@@ -53,6 +53,7 @@ router.post(
       console.log('FILE:', req.file)
 
       let profile_photo = ''
+      /*
       if (req.file) {
         try {
           // Upload to Cloudinary
@@ -75,6 +76,11 @@ router.post(
           throw new Error('Failed to upload image')
         }
       }
+      */
+      if (req.file) {
+        profile_photo = '/images/placeholder.jpg' // Placeholder
+        await unlink(req.file.path)
+      }
 
       console.log(profile_photo)
 
@@ -90,8 +96,11 @@ router.post(
       res.status(201).json(result)
       console.log('POST req in express route succcessful')
     } catch (err) {
-      console.log(err)
-      res.status(400).json('Bad Post request')
+      console.error(err)
+      res.status(400).json({
+        message: 'Bad Post request',
+        error: err instanceof Error ? err.message : String(err),
+      })
     }
   },
 )

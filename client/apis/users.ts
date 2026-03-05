@@ -40,6 +40,7 @@ export async function getAllUserActivity(
   }
 }
 
+/*
 export async function postUser(
   formData: FormData,
   token: string,
@@ -49,6 +50,35 @@ export async function postUser(
       .post(`${rootURL}/users`)
       .set('Authorization', `Bearer ${token}`)
       .send(formData)
+    console.log('API client function successful')
+    return result.body
+  } catch (err) {
+    console.log(
+      'there was an error posting the new user to the server from the client side API functions',
+      err,
+    )
+  }
+}
+*/
+
+export async function postUser(
+  formData: FormData,
+  token: string,
+): Promise<User | undefined> {
+  try {
+    const req = request
+      .post(`${rootURL}/users`)
+      .set('Authorization', `Bearer ${token}`)
+
+    formData.forEach((value, key) => {
+      if (value instanceof File) {
+        req.attach(key, value)
+      } else {
+        req.field(key, value)
+      }
+    })
+
+    const result = await req
     console.log('API client function successful')
     return result.body
   } catch (err) {

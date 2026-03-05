@@ -24,6 +24,7 @@ export async function addUser(user: UserBackend): Promise<User[] | undefined> {
     return result
   } catch (err) {
     console.log(err, 'Error in the knex ORM insert function')
+    throw err
   }
 }
 
