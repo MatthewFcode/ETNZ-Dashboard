@@ -8,7 +8,7 @@ import { unlink } from 'node:fs/promises'
 //import dotenv from 'dotenv'
 
 const router = Router()
-const upload = multer({ dest: 'tmp' })
+const upload = multer({ dest: '/tmp' })
 
 //dotenv.config()
 
