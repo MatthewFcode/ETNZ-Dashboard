@@ -57,7 +57,7 @@ router.post(
       console.log('FILE:', req.file)
 
       let profile_photo = ''
-      /*
+
       if (req.file) {
         try {
           // Upload to Cloudinary
@@ -80,7 +80,7 @@ router.post(
           throw new Error('Failed to upload image')
         }
       }
-      */
+
       if (req.file) {
         profile_photo = '/images/placeholder.jpg' // Placeholder
         await unlink(req.file.path)
