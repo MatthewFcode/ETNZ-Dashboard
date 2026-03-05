@@ -18,12 +18,19 @@ function App() {
       console.log('Message received:', event.data)
       try {
         const data = JSON.parse(event.data)
-        if (data.type === 'database_change') {
-          // once there is the change in the database detected mark a the variable as true
+
+        if (
+          (data.type === 'database_change' && data.message === 'New AI chat') ||
+          data.message === 'Chat Mutation'
+        ) {
+          queryClient.invalidateQueries({ queryKey: ['all-chats'] })
+        }
+        if (
+          data.type === 'database_change' &&
+          data.message === 'New telemetry data'
+        ) {
+          // once there is the change in the database detected mark a the variable as true for the set timeout
           shouldInvalidate = true
-          // queryClient.invalidateQueries({
-          //   queryKey: ['telemetry', 'all-sensors'],
-          // })
         }
       } catch (err) {
         console.error('Error parsing WebSocket message:', err)

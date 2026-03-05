@@ -4,15 +4,17 @@ import { wss } from '../server.ts'
 import ws from 'ws'
 import 'dotenv/config'
 
-const db = connection
+const db = connection // db connection for connecting the knex ORM and being able to perform SQL queries as JavaScript on our database
 
 const model = new ChatGoogleGenerativeAI({
+  // LLM model client
   model: 'gemini-1.5-flash',
   temperature: 0.7,
 })
 
 // I want to first get all the seed userss I guess so we are gong to get all the users
 interface User {
+  // user interface for our seeds
   id: number
   auth0Id: string
   name: string
@@ -20,7 +22,9 @@ interface User {
   profile_photo: string
   activity_status: string
 }
+
 const getAllUsers = async (): Promise<User[] | undefined> => {
+  // getting all of our seed users
   try {
     const result = await db('users').where({ is_seed_user: true }).select()
     return result
@@ -35,10 +39,11 @@ const getAllUsers = async (): Promise<User[] | undefined> => {
 interface Chat {
   id?: number
   message: string
-  time_sent: string
+  time_sent?: string
   auth0Id: string
 }
 const getAllChats = async (): Promise<Chat[] | undefined> => {
+  // getting all the chats
   try {
     const result = await db('chat').select()
     return result
@@ -55,22 +60,22 @@ const getAllChats = async (): Promise<Chat[] | undefined> => {
 // we need to update user activity when we send a chat aswell
 const generateChats = async (): Promise<Chat | undefined> => {
   try {
-    const allUsers = await getAllUsers()
+    const allUsers = await getAllUsers() // saving all users to a variable
 
-    const allChats = await getAllChats()
+    const allChats = await getAllChats() // saving all chats to a variable
 
     const conversation = allChats!
       .map((chat) => `${chat.auth0Id}: ${chat.message}`)
-      .join('\n')
+      .join('\n') // making all the chats a string
 
-    const lastChat: Chat = allChats![allChats!.length - 1]
+    const lastChat: Chat = allChats![allChats!.length - 1] // getting the last chat
 
     const eligibleUsers = allUsers!.filter(
       (u: User) => u.auth0Id !== lastChat.auth0Id,
-    )
+    ) // filtering through the objects in the users var to remove the one that sent the last chat
 
     const respondingUser =
-      eligibleUsers[Math.floor(Math.random() * eligibleUsers.length)]
+      eligibleUsers[Math.floor(Math.random() * eligibleUsers.length)] // picking a random users to respond by Math.randoming an index
 
     const prompt = `You are continuing a conversation amongst multiple users, this is the entire conversation so far ${conversation}. Come up with a response as if you were ${respondingUser.name}. The message should be relevant and respond to the last message. Only provide the message text and nothing else.`
 
@@ -81,15 +86,14 @@ const generateChats = async (): Promise<Chat | undefined> => {
         : response.content
             .map((block) => ('text' in block ? block.text : ''))
             .join('')
-            .trim()
+            .trim() // langchaing response glotch blocker
 
     const newChat: Chat = {
       auth0Id: respondingUser.auth0Id,
       message: messageContent,
-      time_sent: new Date().toISOString(),
     }
 
-    await db('users')
+    await db('users') // updating the user activity in the user table by the auth0Id of the responding user
       .where('users.auth0Id', respondingUser.auth0Id)
       .update({ activity_status: db.fn.now() })
 
@@ -102,11 +106,12 @@ const generateChats = async (): Promise<Chat | undefined> => {
 
 export function chatGenerator() {
   setTimeout(async () => {
-    const newChat = await generateChats()
+    const newChat = await generateChats() // saves the object to a variable
 
-    await db('chat').insert(newChat)
+    await db('chat').insert(newChat) // inserts the new chat into the chat table
 
     wss.clients.forEach((client) => {
+      // loops through the clients and send the database change
       if (client.readyState === ws.OPEN) {
         client.send(
           JSON.stringify({
