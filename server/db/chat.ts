@@ -41,6 +41,47 @@ export async function postChat(
     )
   }
 }
+
+interface UpdateChat {
+  message: string
+  auth0Id: string
+}
+interface UpdateChatResult {
+  name: string
+  role: string
+  profile_photo: string
+  message: string
+  time_sent: string
+}
+export async function updateChat(
+  id: number,
+  auth0Id: string,
+  newChat: UpdateChat[],
+): Promise<UpdateChatResult | undefined> {
+  try {
+    await db('chat')
+      .where('chat.id', id)
+      .andWhere('chat.auth0Id', auth0Id)
+      .update(newChat)
+
+    // returning the updated chat and joinging the users table
+    const result = await db('chat')
+      .join('users', 'chat.auth0Id', 'users.auth0Id')
+      .where('chat.id', id)
+      .select(
+        'users.name',
+        'users.role',
+        'users.profile_photo',
+        'chat.message',
+        'chat.time_sent',
+      )
+      .first()
+
+    return result
+  } catch (err) {
+    console.log('there was an error in the Knex update chat function', err)
+  }
+}
 // a function for deleting the message by the ID  || fuck knows where the id comes from on the client ngl I compleley forgot
 export async function deleteChat(id: number): Promise<number | undefined> {
   try {
