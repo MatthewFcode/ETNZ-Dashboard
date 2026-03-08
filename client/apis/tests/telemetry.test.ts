@@ -46,6 +46,7 @@ describe('Test frequencies of telemetry data coming through the front end API en
     const server = 'http://localhost:3000'
     const BASE_URL = '/api/v1'
     const firstFakeResponse: TelemetryDataCamel[] = [
+      // literally testing that the nock framework works because I am not testing the api functions at all
       {
         sensorId: 'sensor-1',
         timeStamp: new Date().toISOString(),
