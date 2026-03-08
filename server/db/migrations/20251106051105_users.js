@@ -5,8 +5,12 @@
 export async function up(knex) {
   await knex.schema.createTable('users', (table) => {
     table.increments('id').primary()
+    table.string('auth0Id').unique().notNullable()
     table.string('name')
     table.string('role')
+    table.string('profile_photo')
+    table.timestamp('activity_status').defaultTo(knex.fn.now())
+    table.boolean('is_seed_user').defaultTo(false)
   })
 }
 

@@ -2,6 +2,8 @@ import Dashboard from './Dashboard.tsx'
 import { TelemetryProvider } from './Context.tsx'
 import { useEffect } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
+import RequireAuth from './RequireAuth.tsx'
+
 function App() {
   const queryClient = useQueryClient()
 
@@ -16,12 +18,26 @@ function App() {
       console.log('Message received:', event.data)
       try {
         const data = JSON.parse(event.data)
-        if (data.type === 'database_change') {
-          // once there is the change in the database detected mark a the variable as true
+
+        if (
+          (data.type === 'database_change' && data.message === 'New AI chat') ||
+          data.message === 'Chat Mutation'
+        ) {
+          queryClient.invalidateQueries({ queryKey: ['all-chats'] })
+        }
+        if (
+          data.type === 'database_change' &&
+          data.message === 'New telemetry data'
+        ) {
+          // once there is the change in the database detected mark a the variable as true for the set timeout
           shouldInvalidate = true
-          // queryClient.invalidateQueries({
-          //   queryKey: ['telemetry', 'all-sensors'],
-          // })
+        }
+        if (data.type === 'user_change') {
+          queryClient.invalidateQueries({ queryKey: ['user-activity'] })
+          // If it's a profile update, also refresh the current user details
+          if (data.message === 'User Profile Updated') {
+            queryClient.invalidateQueries({ queryKey: ['user'] })
+          }
         }
       } catch (err) {
         console.error('Error parsing WebSocket message:', err)
@@ -33,6 +49,7 @@ function App() {
         queryClient.invalidateQueries({
           queryKey: ['telemetry', 'all-sensors'],
         })
+        shouldInvalidate = false
       }
     }, 700)
 
@@ -53,9 +70,11 @@ function App() {
   return (
     <>
       <div className="app">
-        <TelemetryProvider>
-          <Dashboard />
-        </TelemetryProvider>
+        <RequireAuth>
+          <TelemetryProvider>
+            <Dashboard />
+          </TelemetryProvider>
+        </RequireAuth>
       </div>
     </>
   )

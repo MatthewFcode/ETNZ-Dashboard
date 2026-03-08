@@ -1,9 +1,11 @@
+import 'dotenv/config' // importing dotenv vars and injects them into process.env  everywhere in the server
 import express from 'express'
 import * as Path from 'node:path'
 import { createServer } from 'http'
 import { WebSocketServer } from 'ws'
-
 import telemetryRoutes from './routes/telemetry.ts'
+import userRoutes from './routes/users.ts'
+import chatRoutes from './routes/chat.ts'
 
 const app = express()
 
@@ -13,6 +15,8 @@ const wss = new WebSocketServer({ server })
 app.use(express.json())
 
 app.use('/api/v1/telemetry', telemetryRoutes)
+app.use('/api/v1/users', userRoutes)
+app.use('/api/v1/chat', chatRoutes)
 
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(Path.resolve('public')))
