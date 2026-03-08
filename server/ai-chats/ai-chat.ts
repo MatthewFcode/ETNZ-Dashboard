@@ -106,7 +106,7 @@ const generateChats = async (): Promise<Chat | undefined> => {
 }
 
 export function chatGenerator() {
-  setTimeout(async () => {
+  setInterval(async () => {
     const newChat = await generateChats() // saves the object to a variable
 
     await db('chat').insert(newChat) // inserts the new chat into the chat table
@@ -123,5 +123,6 @@ export function chatGenerator() {
         )
       }
     })
+    console.log(`New chat generated ${newChat}`)
   }, 20000)
 }
