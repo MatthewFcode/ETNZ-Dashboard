@@ -5,14 +5,24 @@ import checkJwt, { JwtRequest } from '../auth0.ts'
 import multer from 'multer'
 import cloudinary from '../cloudinary.js'
 import { unlink } from 'node:fs/promises'
-//import dotenv from 'dotenv'
+import { wss } from '../server.ts'
 
 const router = Router()
 const upload = multer({ dest: 'tmp' })
 
-//dotenv.config()
-
-console.log('Cloudinary:', process.env.CLOUDINARY_CLOUD_NAME)
+// Function to broadcast user changes
+const broadcastUserChange = (message: string) => {
+  wss.clients.forEach((client) => {
+    if (client.readyState === 1) {
+      client.send(
+        JSON.stringify({
+          type: 'user_change',
+          message: message,
+        }),
+      )
+    }
+  })
+}
 
 router.get('/', checkJwt, async (req: JwtRequest, res) => {
   try {
@@ -20,6 +30,7 @@ router.get('/', checkJwt, async (req: JwtRequest, res) => {
     const user = await db.getUserByAuth0Id(auth0Id)
 
     await db.updateUserActivity(auth0Id)
+    broadcastUserChange('User Activity Update')
 
     res.status(200).json(user)
   } catch (err) {
@@ -91,6 +102,7 @@ router.post(
       }
 
       const result = await db.addUser(user)
+      broadcastUserChange('New User Registered')
 
       res.status(201).json(result)
       console.log('POST req in express route succcessful')
@@ -116,6 +128,7 @@ router.patch('/', checkJwt, async (req: JwtRequest, res) => {
     }
 
     const result = await db.updateUser(auth0Id, user)
+    broadcastUserChange('User Profile Updated')
 
     res.json(result).status(200)
   } catch (err) {
@@ -129,6 +142,7 @@ router.delete('/', checkJwt, async (req: JwtRequest, res) => {
     const auth0Id = req.auth?.sub as string
 
     await db.deleteUser(auth0Id)
+    broadcastUserChange('User Deleted')
     res.sendStatus(204)
   } catch (err) {
     console.log(err)

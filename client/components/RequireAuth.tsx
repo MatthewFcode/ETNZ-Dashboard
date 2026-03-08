@@ -8,7 +8,7 @@ function RequireAuth({ children }: { children: ReactNode }) {
   const handleLogin = () => {
     loginWithRedirect({
       authorizationParams: {
-        redirectUri: `${window.location.origin}/registration`,
+        redirectUri: window.location.origin,
       },
     })
   }

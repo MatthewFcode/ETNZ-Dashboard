@@ -1,19 +1,29 @@
-import { usePostUser } from '../hooks/useUsers.ts'
+import { usePostUser, useGetUserByAuth0Id } from '../hooks/useUsers.ts'
 import { useNavigate } from 'react-router'
-//import { useAuth0 } from '@auth0/auth0-react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { IfAuthenticated, IfNotAuthenticated } from './Auth0.tsx'
+import LoadingSpinner from './LoadingSpinner.tsx'
 
 function Registraton() {
   const postUser = usePostUser()
-  //const { getAccessTokenSilently } = useAuth0()
+  const { data: userData, isLoading: userLoading } = useGetUserByAuth0Id()
   const navigate = useNavigate()
+
+  useEffect(() => {
+    if (!userLoading && userData) {
+      navigate('/')
+    }
+  }, [userData, userLoading, navigate])
 
   const [form, setForm] = useState({
     name: '',
     role: '',
     file: null as File | null,
   })
+
+  if (userLoading) {
+    return <LoadingSpinner />
+  }
 
   const handleChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
     evt.preventDefault()
