@@ -53,7 +53,8 @@ router.post('/', checkJwt, async (req: JwtRequest, res) => {
 router.delete('/:id', checkJwt, async (req: JwtRequest, res) => {
   try {
     const id = Number(req.params.id)
-    await db.deleteChat(id)
+    const auth0Id = req.auth?.sub
+    await db.deleteChat(id, auth0Id as string)
 
     wss.clients.forEach((client) => {
       // loops through the clients and send the database change

@@ -83,9 +83,15 @@ export async function updateChat(
   }
 }
 // a function for deleting the message by the ID  || fuck knows where the id comes from on the client ngl I compleley forgot
-export async function deleteChat(id: number): Promise<number | undefined> {
+export async function deleteChat(
+  id: number,
+  auth0Id: string,
+): Promise<number | undefined> {
   try {
-    const result = await db('chat').where('chat.id', id).delete()
+    const result = await db('chat')
+      .where('chat.id', id)
+      .andWhere('chat.auth0Id', auth0Id)
+      .delete()
     return result
   } catch (err) {
     console.log(
