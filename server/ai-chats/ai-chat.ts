@@ -98,6 +98,18 @@ const generateChats = async (): Promise<Chat | undefined> => {
       .where('users.auth0Id', respondingUser.auth0Id)
       .update({ activity_status: db.fn.now() })
 
+    wss.clients.forEach((client) => {
+      // loops through the clients and send the database change
+      if (client.readyState === ws.OPEN) {
+        client.send(
+          JSON.stringify({
+            type: 'user_change',
+            message: 'user_change',
+          }),
+        )
+      }
+    })
+
     return newChat
   } catch (err) {
     console.error('Error generating next chat:', err)
@@ -124,5 +136,5 @@ export function chatGenerator() {
       }
     })
     console.log(`New chat generated ${JSON.stringify(newChat)}`)
-  }, 2000000)
+  }, 20000)
 }

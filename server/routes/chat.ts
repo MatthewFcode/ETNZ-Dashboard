@@ -2,6 +2,7 @@ import * as db from '../db/chat.ts'
 import { Router } from 'express'
 import checkJwt, { JwtRequest } from '../auth0.ts'
 import { PostChat, GetChat } from '../../models/chat.ts'
+import { updateUserActivity } from '../db/users.ts'
 import { wss } from '../server.ts'
 import ws from 'ws'
 
@@ -27,6 +28,8 @@ router.post('/', checkJwt, async (req: JwtRequest, res) => {
     }
 
     const result = await db.postChat(message)
+
+    await updateUserActivity(auth0Id as string)
 
     wss.clients.forEach((client) => {
       // loops through the clients and send the database change
