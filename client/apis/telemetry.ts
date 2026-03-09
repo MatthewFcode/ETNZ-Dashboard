@@ -7,11 +7,13 @@ const rootURL =
     : 'http://localhost:3000/api/v1'
 
 // this is the API function used in production | the useQuery is run directly in the context container
-export async function getAllTelemetryData(): Promise<
-  TelemetryDataCamel[] | undefined
-> {
+export async function getAllTelemetryData(
+  token: string,
+): Promise<TelemetryDataCamel[] | undefined> {
   try {
-    const result = await request.get(`${rootURL}/telemetry`)
+    const result = await request
+      .get(`${rootURL}/telemetry`)
+      .set('Authorization', `Bearer ${token}`)
     return result.body
   } catch (err) {
     console.log(err)
