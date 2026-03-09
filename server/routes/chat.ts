@@ -83,7 +83,7 @@ router.patch('/:id', checkJwt, async (req: JwtRequest, res) => {
 
     res.status(200).json(result)
   } catch (err) {
-    res.status(400).json('Bad PATCH request ')
+    res.status(400).json('Bad PATCH request')
     console.log('Error in the PATCH express route', err)
   }
 })

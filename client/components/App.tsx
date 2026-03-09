@@ -62,6 +62,9 @@ function App() {
       <div className="app">
         <RequireAuth>
           <TelemetryProvider>
+            {' '}
+            {/* everything inside of AI can access our global container with the
+            telemetric data in it */}
             <Dashboard />
           </TelemetryProvider>
         </RequireAuth>
