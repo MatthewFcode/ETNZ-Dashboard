@@ -18,26 +18,16 @@ function App() {
       console.log('Message received:', event.data)
       try {
         const data = JSON.parse(event.data)
-
-        if (
-          (data.type === 'database_change' && data.message === 'New AI chat') ||
-          data.message === 'Chat Mutation'
-        ) {
-          queryClient.invalidateQueries({ queryKey: ['all-chats'] })
+        if (data.type === 'database_change') {
+          queryClient.invalidateQueries({ queryKey: [''] })
         }
+
         if (
           data.type === 'database_change' &&
           data.message === 'New telemetry data'
         ) {
           // once there is the change in the database detected mark a the variable as true for the set timeout
           shouldInvalidate = true
-        }
-        if (data.type === 'user_change') {
-          queryClient.invalidateQueries({ queryKey: ['user-activity'] })
-          // If it's a profile update, also refresh the current user details
-          if (data.message === 'User Profile Updated') {
-            queryClient.invalidateQueries({ queryKey: ['user'] })
-          }
         }
       } catch (err) {
         console.error('Error parsing WebSocket message:', err)

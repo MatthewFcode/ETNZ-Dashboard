@@ -56,7 +56,7 @@ interface UpdateChatResult {
 export async function updateChat(
   id: number,
   auth0Id: string,
-  newChat: UpdateChat[],
+  newChat: UpdateChat,
 ): Promise<UpdateChatResult | undefined> {
   try {
     await db('chat')
