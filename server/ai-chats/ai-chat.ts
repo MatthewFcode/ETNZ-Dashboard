@@ -136,5 +136,5 @@ export function chatGenerator() {
       }
     })
     console.log(`New chat generated ${JSON.stringify(newChat)}`)
-  }, 20000)
+  }, 2000000)
 }
