@@ -18,8 +18,11 @@ function App() {
       console.log('Message received:', event.data)
       try {
         const data = JSON.parse(event.data)
-        if (data.type === 'database_change') {
-          queryClient.invalidateQueries({ queryKey: [''] })
+        if (
+          data.type === 'database_change' &&
+          data.message === 'General Mutation'
+        ) {
+          queryClient.invalidateQueries({ queryKey: ['all-chats'] })
         }
 
         if (

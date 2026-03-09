@@ -15,6 +15,18 @@ router.get('/', checkJwt, async (req: JwtRequest, res) => {
     const result: GetChat[] | undefined = await db.getAllChats()
 
     await updateUserActivity(auth0Id as string)
+    // websocket for user activity change
+    wss.clients.forEach((client) => {
+      // loops through the clients and send the database change
+      if (client.readyState === ws.OPEN) {
+        client.send(
+          JSON.stringify({
+            type: 'database_change',
+            message: 'General Mutation',
+          }),
+        )
+      }
+    })
 
     res.status(200).json(result)
   } catch (err) {

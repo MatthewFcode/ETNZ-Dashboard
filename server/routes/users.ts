@@ -6,32 +6,30 @@ import multer from 'multer'
 import cloudinary from '../cloudinary.js'
 import { unlink } from 'node:fs/promises'
 import { wss } from '../server.ts'
+import ws from 'ws'
 
 const router = Router()
 const upload = multer({ dest: 'tmp' })
 
-// Function to broadcast user changes
-const broadcastUserChange = (message: string) => {
-  wss.clients.forEach((client) => {
-    if (client.readyState === 1) {
-      client.send(
-        JSON.stringify({
-          type: 'user_change',
-          message: message,
-        }),
-      )
-    }
-  })
-}
-
+// gettting yourself on the intial login
 router.get('/', checkJwt, async (req: JwtRequest, res) => {
   try {
     const auth0Id = req.auth?.sub as string
     const user = await db.getUserByAuth0Id(auth0Id)
 
     await db.updateUserActivity(auth0Id)
-    broadcastUserChange('User Activity Update')
 
+    wss.clients.forEach((client) => {
+      // loops through the clients and send the database change
+      if (client.readyState === ws.OPEN) {
+        client.send(
+          JSON.stringify({
+            type: 'database_change',
+            message: 'General Mutation',
+          }),
+        )
+      }
+    })
     res.status(200).json(user)
   } catch (err) {
     res.status(500).json('Internal Server Error')
@@ -43,6 +41,9 @@ router.get('/', checkJwt, async (req: JwtRequest, res) => {
 router.get('/activity', checkJwt, async (req: JwtRequest, res) => {
   try {
     const result = await db.getAllUserActivity()
+    const auth0Id = req.auth?.sub
+
+    await db.updateUserActivity(auth0Id!)
     res.status(200).json(result)
   } catch (err) {
     console.log(err)
@@ -63,9 +64,6 @@ router.post(
   async (req: JwtRequest, res) => {
     try {
       const auth0Id = req.auth?.sub
-      console.log('AUTH:', auth0Id)
-      console.log('BODY:', req.body)
-      console.log('FILE:', req.file)
 
       let profile_photo = ''
 
@@ -102,15 +100,26 @@ router.post(
       }
 
       const result = await db.addUser(user)
-      broadcastUserChange('New User Registered')
+
+      await db.updateUserActivity(auth0Id as string)
+
+      wss.clients.forEach((client) => {
+        // loops through the clients and send the database change
+        if (client.readyState === ws.OPEN) {
+          client.send(
+            JSON.stringify({
+              type: 'database_change',
+              message: 'General Mutation',
+            }),
+          )
+        }
+      })
 
       res.status(201).json(result)
-      console.log('POST req in express route succcessful')
     } catch (err) {
       console.error(err)
       res.status(400).json({
         message: 'Bad Post request',
-        error: err instanceof Error ? err.message : String(err),
       })
     }
   },
@@ -128,7 +137,18 @@ router.patch('/', checkJwt, async (req: JwtRequest, res) => {
     }
 
     const result = await db.updateUser(auth0Id, user)
-    broadcastUserChange('User Profile Updated')
+
+    wss.clients.forEach((client) => {
+      // loops through the clients and send the database change
+      if (client.readyState === ws.OPEN) {
+        client.send(
+          JSON.stringify({
+            type: 'database_change',
+            message: 'General Mutation',
+          }),
+        )
+      }
+    })
 
     res.json(result).status(200)
   } catch (err) {
@@ -142,7 +162,20 @@ router.delete('/', checkJwt, async (req: JwtRequest, res) => {
     const auth0Id = req.auth?.sub as string
 
     await db.deleteUser(auth0Id)
-    broadcastUserChange('User Deleted')
+    await db.updateUserActivity(auth0Id)
+
+    wss.clients.forEach((client) => {
+      // loops through the clients and send the database change
+      if (client.readyState === ws.OPEN) {
+        client.send(
+          JSON.stringify({
+            type: 'database_change',
+            message: 'General Mutation',
+          }),
+        )
+      }
+    })
+
     res.sendStatus(204)
   } catch (err) {
     console.log(err)

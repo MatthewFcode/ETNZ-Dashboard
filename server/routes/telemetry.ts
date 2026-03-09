@@ -1,12 +1,32 @@
 import { Router } from 'express'
 import * as db from '../db/telemetry.ts'
 import { TelemetryDataSnake } from '../../models/telemetry.ts'
+import checkJwt, { JwtRequest } from '../auth0.ts'
+import { updateUserActivity } from '../db/users.ts'
+import { wss } from '../server.ts'
+import ws from 'ws'
 
 const router = Router()
 
-router.get('/', async (req, res) => {
+router.get('/', checkJwt, async (req: JwtRequest, res) => {
   try {
     const snake = await db.getAllData()
+    const auth0Id = req.auth?.sub
+
+    await updateUserActivity(auth0Id as string)
+
+    //websocket for user activity updating | in theory every time that the websocket for the telemetric sensor refetches this route we execute the function and then we broadcast the websocket for the user activity which means when a user is logged in it catches it
+    wss.clients.forEach((client) => {
+      // loops through the clients and send the database change
+      if (client.readyState === ws.OPEN) {
+        client.send(
+          JSON.stringify({
+            type: 'database_change',
+            message: 'General Mutation',
+          }),
+        )
+      }
+    })
 
     const result = snake?.map(
       ({
