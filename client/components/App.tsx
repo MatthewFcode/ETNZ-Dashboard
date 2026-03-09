@@ -23,6 +23,7 @@ function App() {
           data.message === 'General Mutation'
         ) {
           queryClient.invalidateQueries({ queryKey: ['all-chats'] })
+          queryClient.invalidateQueries({ queryKey: ['user-activity'] })
         }
 
         if (
