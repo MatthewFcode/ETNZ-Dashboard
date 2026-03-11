@@ -69,7 +69,7 @@ export async function updateUserActivity(auth0Id: string): Promise<undefined> {
   try {
     await db('users')
       .where('users.auth0Id', auth0Id)
-      .update({ activity_status: db.fn.now() })
+      .update({ activity_status: new Date().toISOString() })
   } catch (err) {
     console.log(err)
   }

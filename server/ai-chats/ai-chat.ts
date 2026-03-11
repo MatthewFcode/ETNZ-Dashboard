@@ -94,9 +94,21 @@ const generateChats = async (): Promise<Chat | undefined> => {
       message: messageContent,
     }
 
-    await db('users') // updating the user activity in the user table by the auth0Id of the responding user
+    await db('users')
       .where('users.auth0Id', respondingUser.auth0Id)
-      .update({ activity_status: db.fn.now() })
+      .update({ activity_status: new Date().toISOString() })
+
+    wss.clients.forEach((client) => {
+      // loops through the clients and send the database change
+      if (client.readyState === ws.OPEN) {
+        client.send(
+          JSON.stringify({
+            type: 'database_change',
+            message: 'General Mutation',
+          }),
+        )
+      }
+    })
 
     return newChat
   } catch (err) {
@@ -124,5 +136,5 @@ export function chatGenerator() {
       }
     })
     console.log(`New chat generated ${JSON.stringify(newChat)}`)
-  }, 2000000)
+  }, 20000)
 }
