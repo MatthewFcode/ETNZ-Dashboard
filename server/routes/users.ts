@@ -5,8 +5,7 @@ import checkJwt, { JwtRequest } from '../auth0.ts'
 import multer from 'multer'
 import cloudinary from '../cloudinary.js'
 import { unlink } from 'node:fs/promises'
-import { wss } from '../server.ts'
-import ws from 'ws'
+import { broadcast } from '../wss.ts'
 
 const router = Router()
 const upload = multer({ dest: 'tmp' })
@@ -19,17 +18,7 @@ router.get('/', checkJwt, async (req: JwtRequest, res) => {
 
     await db.updateUserActivity(auth0Id)
 
-    wss.clients.forEach((client) => {
-      // loops through the clients and send the database change
-      if (client.readyState === ws.OPEN) {
-        client.send(
-          JSON.stringify({
-            type: 'database_change',
-            message: 'General Mutation',
-          }),
-        )
-      }
-    })
+    broadcast('database_change', 'General Mutation')
     res.status(200).json(user)
   } catch (err) {
     res.status(500).json('Internal Server Error')
@@ -103,17 +92,7 @@ router.post(
 
       await db.updateUserActivity(auth0Id as string)
 
-      wss.clients.forEach((client) => {
-        // loops through the clients and send the database change
-        if (client.readyState === ws.OPEN) {
-          client.send(
-            JSON.stringify({
-              type: 'database_change',
-              message: 'General Mutation',
-            }),
-          )
-        }
-      })
+      broadcast('database_change', 'General Mutation')
 
       res.status(201).json(result)
     } catch (err) {
@@ -138,17 +117,7 @@ router.patch('/', checkJwt, async (req: JwtRequest, res) => {
 
     const result = await db.updateUser(auth0Id, user)
 
-    wss.clients.forEach((client) => {
-      // loops through the clients and send the database change
-      if (client.readyState === ws.OPEN) {
-        client.send(
-          JSON.stringify({
-            type: 'database_change',
-            message: 'General Mutation',
-          }),
-        )
-      }
-    })
+    broadcast('database_change', 'General Mutation')
 
     res.json(result).status(200)
   } catch (err) {
@@ -164,17 +133,7 @@ router.delete('/', checkJwt, async (req: JwtRequest, res) => {
     await db.deleteUser(auth0Id)
     await db.updateUserActivity(auth0Id)
 
-    wss.clients.forEach((client) => {
-      // loops through the clients and send the database change
-      if (client.readyState === ws.OPEN) {
-        client.send(
-          JSON.stringify({
-            type: 'database_change',
-            message: 'General Mutation',
-          }),
-        )
-      }
-    })
+    broadcast('database_change', 'General Mutation')
 
     res.sendStatus(204)
   } catch (err) {

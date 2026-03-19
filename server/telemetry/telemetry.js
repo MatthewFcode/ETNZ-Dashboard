@@ -1,5 +1,5 @@
 import connection from '../db/connection.ts'
-import ws from 'ws'
+import { broadcast } from '../wss.ts'
 
 const db = connection
 
@@ -14,7 +14,7 @@ function generateTelemetry(sensorId) {
   }
 }
 
-export async function startTelemetryGeneration(wss) {
+export async function startTelemetryGeneration() {
   // declare an array of sensors 15 all producing the same data
   const sensors = [
     'sensor-1',
@@ -41,16 +41,7 @@ export async function startTelemetryGeneration(wss) {
       await db('telemetry').where('telemetry.sensor_id', id).update(telemetry)
       await db('historical_data').insert(telemetry)
 
-      wss.clients.forEach((client) => {
-        if (client.readyState === ws.OPEN) {
-          client.send(
-            JSON.stringify({
-              type: 'database_change',
-              message: 'New telemetry data',
-            }),
-          )
-        }
-      })
+      broadcast('database_change', 'New telemetry data')
     }
   }, 200)
 }

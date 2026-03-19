@@ -1,7 +1,6 @@
 import { ChatGoogleGenerativeAI } from '@langchain/google-genai'
 import connection from '../db/connection.ts'
-import ws from 'ws'
-import { wss } from '../server.ts'
+import { broadcast } from '../wss.ts'
 import 'dotenv/config'
 
 const db = connection // db connection for connecting the knex ORM and being able to perform SQL queries as JavaScript on our database
@@ -98,17 +97,7 @@ const generateChats = async (): Promise<Chat | undefined> => {
       .where('users.auth0Id', respondingUser.auth0Id)
       .update({ activity_status: new Date().toISOString() })
 
-    wss.clients.forEach((client) => {
-      // loops through the clients and send the database change
-      if (client.readyState === ws.OPEN) {
-        client.send(
-          JSON.stringify({
-            type: 'database_change',
-            message: 'General Mutation',
-          }),
-        )
-      }
-    })
+    broadcast('database_change', 'General Mutation')
 
     return newChat
   } catch (err) {
@@ -118,23 +107,19 @@ const generateChats = async (): Promise<Chat | undefined> => {
 }
 
 export function chatGenerator() {
+  console.log('AI chat generator service started')
   setInterval(async () => {
-    const newChat = await generateChats() // saves the object to a variable
+    try {
+      const newChat = await generateChats() // saves the object to a variable
 
-    await db('chat').insert(newChat) // inserts the new chat into the chat table
+      if (newChat) {
+        await db('chat').insert(newChat) // inserts the new chat into the chat table
 
-    console.log('AI chat generator started')
-    wss.clients.forEach((client) => {
-      // loops through the clients and send the database change
-      if (client.readyState === ws.OPEN) {
-        client.send(
-          JSON.stringify({
-            type: 'database_change',
-            message: 'General Mutation',
-          }),
-        )
+        broadcast('database_change', 'General Mutation')
+        console.log(`New chat generated and broadcasted: ${JSON.stringify(newChat)}`)
       }
-    })
-    console.log(`New chat generated ${JSON.stringify(newChat)}`)
+    } catch (err) {
+      console.error('Error in chatGenerator interval:', err)
+    }
   }, 20000)
 }
