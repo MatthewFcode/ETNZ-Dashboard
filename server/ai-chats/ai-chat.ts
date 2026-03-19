@@ -77,7 +77,7 @@ const generateChats = async (): Promise<Chat | undefined> => {
     const respondingUser =
       eligibleUsers[Math.floor(Math.random() * eligibleUsers.length)] // picking a random users to respond by Math.randoming an index
 
-    const prompt = `You are continuing a conversation amongst multiple users, this is the entire conversation so far ${conversation}. Come up with a response as if you were ${respondingUser.name}. The message should be relevant and respond to the last message. Only provide the message text and nothing else.`
+    const prompt = `You are continuing a conversation amongst multiple users, this is the entire conversation so far ${conversation}. Come up with a response as if you were ${respondingUser.name}. The message should be relevant and respond to the last message. Only provide the message text and nothing else | make the message 20-30 words maxß.`
 
     const response = await model.invoke(prompt)
     const messageContent =
@@ -116,7 +116,9 @@ export function chatGenerator() {
         await db('chat').insert(newChat) // inserts the new chat into the chat table
 
         broadcast('database_change', 'General Mutation')
-        console.log(`New chat generated and broadcasted: ${JSON.stringify(newChat)}`)
+        console.log(
+          `New chat generated and broadcasted: ${JSON.stringify(newChat)}`,
+        )
       }
     } catch (err) {
       console.error('Error in chatGenerator interval:', err)
