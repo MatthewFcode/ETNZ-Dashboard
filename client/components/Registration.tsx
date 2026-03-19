@@ -1,122 +1,122 @@
-import { usePostUser, useGetUserByAuth0Id } from '../hooks/useUsers.ts'
-import { useNavigate } from 'react-router'
-import { useState, useEffect } from 'react'
-import { IfAuthenticated, IfNotAuthenticated } from './Auth0.tsx'
-import LoadingSpinner from './LoadingSpinner.tsx'
+// import { usePostUser, useGetUserByAuth0Id } from '../hooks/useUsers.ts'
+// import { useNavigate } from 'react-router'
+// import { useState, useEffect } from 'react'
+// import { IfAuthenticated, IfNotAuthenticated } from './Auth0.tsx'
+// import LoadingSpinner from './LoadingSpinner.tsx'
 
-function Registraton() {
-  const postUser = usePostUser()
-  const { data: userData, isLoading: userLoading } = useGetUserByAuth0Id()
-  const navigate = useNavigate()
+// function Registraton() {
+//   const postUser = usePostUser()
+//   const { data: userData, isLoading: userLoading } = useGetUserByAuth0Id()
+//   const navigate = useNavigate()
 
-  useEffect(() => {
-    if (!userLoading && userData) {
-      navigate('/')
-    }
-  }, [userData, userLoading, navigate])
+//   useEffect(() => {
+//     if (!userLoading && userData) {
+//       navigate('/')
+//     }
+//   }, [userData, userLoading, navigate])
 
-  const [form, setForm] = useState({
-    name: '',
-    role: '',
-    file: null as File | null,
-  })
+//   const [form, setForm] = useState({
+//     name: '',
+//     role: '',
+//     file: null as File | null,
+//   })
 
-  if (userLoading) {
-    return <LoadingSpinner />
-  }
+//   if (userLoading) {
+//     return <LoadingSpinner />
+//   }
 
-  const handleChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
-    evt.preventDefault()
-    setForm({
-      ...form,
-      [evt.target.name]: evt.target.value,
-    })
-  }
+//   const handleChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
+//     evt.preventDefault()
+//     setForm({
+//       ...form,
+//       [evt.target.name]: evt.target.value,
+//     })
+//   }
 
-  function handleFileChange(evt: React.ChangeEvent<HTMLInputElement>) {
-    if (evt.target.files && evt.target.files[0]) {
-      setForm({ ...form, file: evt.target.files[0] })
-    }
-  }
-  const handleSubmit = async (evt: React.FormEvent<HTMLFormElement>) => {
-    // const token = await getAccessTokenSilently()
-    evt.preventDefault()
+//   function handleFileChange(evt: React.ChangeEvent<HTMLInputElement>) {
+//     if (evt.target.files && evt.target.files[0]) {
+//       setForm({ ...form, file: evt.target.files[0] })
+//     }
+//   }
+//   const handleSubmit = async (evt: React.FormEvent<HTMLFormElement>) => {
+//     // const token = await getAccessTokenSilently()
+//     evt.preventDefault()
 
-    // const newUser = {
-    //   name: form.name,
-    //   role: form.role,
-    //   profile_photo: form.file
-    // }
-    const formData = new FormData()
-    formData.append('name', form.name)
-    formData.append('role', form.role)
+//     // const newUser = {
+//     //   name: form.name,
+//     //   role: form.role,
+//     //   profile_photo: form.file
+//     // }
+//     const formData = new FormData()
+//     formData.append('name', form.name)
+//     formData.append('role', form.role)
 
-    if (form.file) {
-      formData.append('profile_photo', form.file)
-    }
+//     if (form.file) {
+//       formData.append('profile_photo', form.file)
+//     }
 
-    try {
-      await postUser.mutateAsync(formData)
-      navigate('/')
-    } catch (err) {
-      console.error(err)
-    }
-  }
+//     try {
+//       await postUser.mutateAsync(formData)
+//       navigate('/')
+//     } catch (err) {
+//       console.error(err)
+//     }
+//   }
 
-  return (
-    <div className="registration">
-      <video autoPlay muted loop className="background-video">
-        <source src="/videos/etnz-sunshine.mp4" type="video/mp4" />
-      </video>
-      <div className="content">
-        <IfAuthenticated>
-          <h1>Create your ETNZ race ❗hub account❗</h1>
-          <form onSubmit={handleSubmit} encType="multipart/form-data">
-            <div>
-              <label htmlFor="name">What is your name?</label>
-              <input
-                type="text"
-                id="name"
-                name="name"
-                value={form.name}
-                onChange={handleChange}
-                placeholder="..Matthew"
-              />
-            </div>
-            <div>
-              <label htmlFor="role">What is your role?</label>
-              <input
-                type="text"
-                id="role"
-                name="role"
-                value={form.role}
-                onChange={handleChange}
-                placeholder="..Captain"
-              />
-            </div>
+//   return (
+//     <div className="registration">
+//       <video autoPlay muted loop className="background-video">
+//         <source src="/videos/etnz-sunshine.mp4" type="video/mp4" />
+//       </video>
+//       <div className="content">
+//         <IfAuthenticated>
+//           <h1>Create your ETNZ race ❗hub account❗</h1>
+//           <form onSubmit={handleSubmit} encType="multipart/form-data">
+//             <div>
+//               <label htmlFor="name">What is your name?</label>
+//               <input
+//                 type="text"
+//                 id="name"
+//                 name="name"
+//                 value={form.name}
+//                 onChange={handleChange}
+//                 placeholder="..Matthew"
+//               />
+//             </div>
+//             <div>
+//               <label htmlFor="role">What is your role?</label>
+//               <input
+//                 type="text"
+//                 id="role"
+//                 name="role"
+//                 value={form.role}
+//                 onChange={handleChange}
+//                 placeholder="..Captain"
+//               />
+//             </div>
 
-            <div>
-              <label htmlFor="file">Upload a file..</label>
-              <input
-                type="file"
-                id="profile_photo"
-                name="profile_photo"
-                onChange={handleFileChange}
-              />
-            </div>
-            <button type="submit" disabled={!form.name}>
-              Create Account
-            </button>
-          </form>
-        </IfAuthenticated>
-        <IfNotAuthenticated>
-          <div>
-            <h1>❗Go back and authenticate yourself❗</h1>
-          </div>
-        </IfNotAuthenticated>
-      </div>
-    </div>
-  )
-}
+//             <div>
+//               <label htmlFor="file">Upload a file..</label>
+//               <input
+//                 type="file"
+//                 id="profile_photo"
+//                 name="profile_photo"
+//                 onChange={handleFileChange}
+//               />
+//             </div>
+//             <button type="submit" disabled={!form.name}>
+//               Create Account
+//             </button>
+//           </form>
+//         </IfAuthenticated>
+//         <IfNotAuthenticated>
+//           <div>
+//             <h1>❗Go back and authenticate yourself❗</h1>
+//           </div>
+//         </IfNotAuthenticated>
+//       </div>
+//     </div>
+//   )
+// }
 
-export default Registraton
+// export default Registraton
