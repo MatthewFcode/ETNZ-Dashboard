@@ -32,11 +32,11 @@ const router = createBrowserRouter(routes)
 document.addEventListener('DOMContentLoaded', () => {
   createRoot(document.getElementById('app') as HTMLElement).render(
     <Auth0Provider
-      domain="dev-qh0h6ps1a3nl4n4w.au.auth0.com"
-      clientId="kvt8xq0fYGHnt2mFJUpm0tyz09jGa1dY"
+      domain="matthew-matai-2025.au.auth0.com"
+      clientId="wb2vIz7X9Orj1hiPv9qZPX7qVtrn5oDd"
       authorizationParams={{
         redirect_uri: window.location.origin,
-        audience: 'https://trusts/api',
+        audience: 'https://echo/api',
       }}
     >
       <QueryClientProvider client={queryClient}>

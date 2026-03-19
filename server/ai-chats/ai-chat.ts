@@ -1,7 +1,7 @@
 import { ChatGoogleGenerativeAI } from '@langchain/google-genai'
 import connection from '../db/connection.ts'
-import { wss } from '../server.ts'
 import ws from 'ws'
+import { wss } from '../server.ts'
 import 'dotenv/config'
 
 const db = connection // db connection for connecting the knex ORM and being able to perform SQL queries as JavaScript on our database
@@ -130,7 +130,7 @@ export function chatGenerator() {
         client.send(
           JSON.stringify({
             type: 'database_change',
-            message: 'New AI chat',
+            message: 'General Mutation',
           }),
         )
       }
