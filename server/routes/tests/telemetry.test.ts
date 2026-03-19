@@ -1,9 +1,14 @@
-import { describe, it, expect, beforeEach, beforeAll, afterAll } from 'vitest'
+import { describe, it, expect, beforeEach, beforeAll, afterAll, vi } from 'vitest'
 import request from 'supertest'
 import { StatusCodes } from 'http-status-codes'
-import { server, wss } from '../../server.ts'
+import { server } from '../../server.ts'
 import connection from '../../db/connection.ts'
 import { startTelemetryGeneration } from '../../telemetry/telemetry.js'
+
+// Mock checkJwt to skip authentication in tests
+vi.mock('../../auth0.ts', () => ({
+  default: (req: any, res: any, next: any) => next(),
+}))
 
 const db = connection
 const BASE_URL = '/api/v1/telemetry'
@@ -12,7 +17,7 @@ const BASE_URL = '/api/v1/telemetry'
 const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 
 beforeAll(async () => {
-  startTelemetryGeneration(wss)
+  startTelemetryGeneration()
   await db.migrate.latest()
 })
 
@@ -30,7 +35,7 @@ describe('tests that the database is returning random telemetry data', () => {
     expect(response.status).toBe(StatusCodes.OK)
     expect(response.body[0]).toEqual({
       sensorId: expect.any(String),
-      timeStamp: expect.any(Number),
+      timeStamp: expect.any(String),
       speed: expect.any(Number),
       temperature: expect.any(Number),
       battery: expect.any(Number),
