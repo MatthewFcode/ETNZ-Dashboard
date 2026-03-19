@@ -8,7 +8,8 @@ function App() {
   const queryClient = useQueryClient()
 
   useEffect(() => {
-    const ws = new WebSocket('wss://etnz-dashboard.borb.nz/')
+    //const ws = new WebSocket('wss://etnz-dashboard.borb.nz/')
+    const ws = new WebSocket('http://localhost:3000')
     let shouldInvalidate = false
     ws.onopen = () => {
       console.log('WebSocket connected')
