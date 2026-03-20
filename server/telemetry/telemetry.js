@@ -40,17 +40,16 @@ export async function startTelemetryGeneration(wss) {
       const telemetry = generateTelemetry(id)
       await db('telemetry').where('telemetry.sensor_id', id).update(telemetry)
       await db('historical_data').insert(telemetry)
-
-      wss.clients.forEach((client) => {
-        if (client.readyState === ws.OPEN) {
-          client.send(
-            JSON.stringify({
-              type: 'database_change',
-              message: 'New telemetry data',
-            }),
-          )
-        }
-      })
     }
+    wss.clients.forEach((client) => {
+      if (client.readyState === ws.OPEN) {
+        client.send(
+          JSON.stringify({
+            type: 'database_change',
+            message: 'New telemetry data',
+          }),
+        )
+      }
+    })
   }, 200)
 }

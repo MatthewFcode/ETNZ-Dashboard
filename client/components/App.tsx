@@ -56,7 +56,7 @@ function App() {
       console.error('WebSocket error:', error)
     }
 
-    // Cleanup on unmount
+    //Cleanup on unmount
     return () => {
       ws.close()
       clearInterval(interval)
